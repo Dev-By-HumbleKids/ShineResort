@@ -1,0 +1,113 @@
+/**
+ * Photography is sourced from Unsplash (https://unsplash.com, Unsplash License)
+ * and used as illustrative imagery for the fictional SHINE resort.
+ */
+const ids = {
+  heroSunsetPool: '1600011689032-8b628b8a8747',
+  resortEvening: '1571896349842-33c89424de2d',
+  resortGardenPool: '1520250497591-112f2f40a3f4',
+  resortDeck: '1582719508461-905c673771fd',
+  resortLodge: '1566073771259-6a8506099945',
+  resortNight: '1542314831-068cd1dbfeeb',
+  palmsPoolDusk: '1551882547-ff40c63fe5fa',
+  villaDusk: '1571003123894-1f0594d2b5d9',
+  thatchVillas: '1563911302283-d2bc129e7570',
+  villaTropical: '1584132967334-10e028bd69f7',
+  modernPoolVilla: '1613977257363-707ba9348227',
+  modernPoolVilla2: '1600596542815-ffad4c1539a9',
+  overwaterPool: '1586611292717-f828b167408c',
+  resortCourtyard: '1535827841776-24afc1e255ac',
+  resortPoolPalms: '1610641818989-c2051b5e2cfd',
+  resortLoungers: '1606046604972-77cc76aee944',
+  lobbyLounge: '1611048267451-e6ed903d4a38',
+  cliffPool: '1540541338287-41700207dee6',
+  longPool: '1615460549969-36fa19521a4f',
+
+  roomOceanCurtains: '1501117716987-c8c394bb29df',
+  roomOceanWindow: '1602002418082-a4443e081dd1',
+  roomWarm: '1611892440504-42a792e24d32',
+  roomClassic: '1590490360182-c33d57733427',
+  roomBright: '1609766857041-ed402ea8069a',
+  roomModern: '1578683010236-d716f9a3f461',
+  roomSeaMountain: '1596394516093-501ba68a0ba6',
+  roomSuite: '1618773928121-c32242e63f39',
+  roomSoft: '1631049307264-da0ec9d70304',
+  roomTwin: '1595576508898-0ad5c879a061',
+  bathroom: '1584622650111-993a426fbf0a',
+  roomGrey: '1629140727571-9b5c6f6267b4',
+  roomArt: '1540518614846-7eded433c457',
+  roomDusk: '1566665797739-1674de7a421a',
+
+  beachWhite: '1507525428034-b723cf961d3e',
+  beachSwing: '1519046904884-53103b34b206',
+  beachPalms: '1506953823976-52e1fdc0149a',
+  beachPalmsBlue: '1515238152791-8216bfdf89a7',
+  beachHut: '1499793983690-e29da59ef1c2',
+  beachSunset: '1559494007-9f5847c49d94',
+  beachCalm: '1622396481328-9b1b78cdd9fd',
+  beachDawn: '1505881502353-a1986add3762',
+  sunsetSea: '1473116763249-2faaef81ccda',
+  palmsShore: '1520483601560-389dff434fdf',
+  aerialWaves: '1540206395-68808572332f',
+  aerialShore: '1505228395891-9a51e7e86bf6',
+  ocean: '1559827260-dc66d52bef19',
+  waveCurl: '1500375592092-40eb2168fd21',
+  rockIsland: '1559128010-7c1ad6e1b6a5',
+  islandBay: '1506665531195-3566af2b4dfa',
+  islandLagoon: '1589394815804-964ed0be2eb5',
+  longtailBoats: '1552465011-b4e21bf6e79a',
+  overwaterBungalows: '1590523277543-a94d2e4eb00b',
+  overwaterAerial: '1573843981267-be1999ff37cd',
+  jetty: '1544550581-5f7ceaf7f992',
+  woodenPier: '1439066615861-d1af74d74000',
+  pagodaWater: '1537996194471-e657df975ab4',
+
+  yacht: '1605281317010-fe5ffe798166',
+  yachtWhite: '1569263979104-865ab7cd8d13',
+  sunsetBoat: '1559599746-8823b38544c6',
+  diver: '1544551763-46a013bb70d5',
+  underwater: '1530053969600-caed2596d242',
+  reef: '1583212292454-1fe6229603b7',
+  fishShoal: '1544551763-77ef2d0cfc6c',
+  horseRunning: '1553284965-83fd3e82fa5a',
+  horseBeach: '1534773728080-33d31da27ae5',
+  horsePortrait: '1566251037378-5e04e3bec343',
+  couplePhoto: '1460364157752-926555421a7e',
+  proposal: '1529519195486-16945f0fb37f',
+  celebrationTable: '1519225421980-715cb0215aed',
+
+  spaStones: '1540555700478-4be289fbecef',
+  spaMassage: '1544161515-4ab6ce6db874',
+  spaHotStone: '1600334089648-b0d9d3028eb2',
+  yogaSunrise: '1600618528240-fb9fc964b853',
+  yoga: '1506126613408-eca07ce68773',
+  gym: '1534438327276-14e5300c3a48',
+  training: '1571019614242-c5c5dee9f50b',
+
+  restaurantTerrace: '1559339352-11d035aa65de',
+  restaurantTable: '1414235077428-338989a2e8c0',
+  restaurantInterior: '1517248135467-4c7edcad34c4',
+  restaurantBar: '1544148103-0773bf10d330',
+  cocktailPour: '1470337458703-46ad1756a187',
+  cocktailHand: '1544027993-37dbfe43562a',
+  wineSunset: '1553361371-9b22f78e8b1d',
+  dishPlatter: '1504674900247-0877df9cc836',
+  saladBowl: '1546069901-ba9599a7e63c',
+  salmon: '1467003909585-2f8a72700288',
+  freshSeafood: '1615141982883-c7ad0e69fd62',
+  chefPlating: '1551218808-94e220e084d2',
+  steak: '1600891964092-4316c288032e',
+  noodleBowl: '1559847844-5315695dadae',
+  grillPlatter: '1544025162-d76694265947',
+} as const
+
+export type ImageKey = keyof typeof ids
+
+export function img(key: ImageKey, w = 1600, h?: number) {
+  const size = h ? `&w=${w}&h=${h}` : `&w=${w}`
+  return `https://images.unsplash.com/photo-${ids[key]}?auto=format&fit=crop${size}&q=75`
+}
+
+export function srcSet(key: ImageKey, widths = [480, 800, 1200, 1800]) {
+  return widths.map((w) => `${img(key, w)} ${w}w`).join(', ')
+}
