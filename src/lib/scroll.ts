@@ -5,7 +5,6 @@ let lenis: Lenis | null = null
 export function initSmoothScroll() {
   if (lenis || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return () => {}
   lenis = new Lenis({ duration: 1.1, smoothWheel: true })
-  if (import.meta.env.DEV) (window as unknown as { __lenis?: Lenis }).__lenis = lenis
   let id = 0
   const raf = (t: number) => {
     lenis?.raf(t)
