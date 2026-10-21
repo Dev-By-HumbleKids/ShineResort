@@ -13,8 +13,10 @@ A frontend portfolio project: the website of **SHINE**, a **fictional** five-sta
 
 | Area | What it shows |
 | --- | --- |
-| **Cinematic hero** | Full-bleed golden-hour photography with Ken Burns + scroll parallax, letter-by-letter wordmark reveal, integrated stay search |
-| **3D Resort Island** | Stylised Three.js model of the whole property — drag to orbit, glowing markers link to villas, dining, spa, jetty, horse riding and *Pearl Cay* |
+| **Opening & transitions** | Once-per-visit lantern intro, a midnight “tide” curtain between pages, blur-up image loading, scroll-progress line |
+| **Cinematic hero** | Crossfading 4-slide slideshow with Ken Burns, golden glare, pause control, live Ngwe Saung local time and today’s sunset (computed with the NOAA solar equations) |
+| **Micro-interactions** | Follower cursor with contextual labels (View / Drag / Explore), magnetic CTAs, 3D tilt cards with image swap, count-up stats, marquee, animated wave edges |
+| **3D Resort Island** | Stylised Three.js model of the whole property — gradient sky dome, sun/moon, drifting clouds, depth-tinted lagoon, pulsing surf, a sailboat circling offshore; drag to orbit, glowing markers link to villas, dining, spa, jetty, horse riding and *Pearl Cay* |
 | **3D “dollhouse” villas** | Every room type is generated from data as a cut-away model (roof lifts, stilts over the lagoon, private pools, two storeys) with numbered hotspots linked to real photography — loaded only on demand |
 | **Day ↔ Night** | One toggle switches the whole site *and* the 3D lighting from sunlit shore to lantern-lit night (stars, glowing windows, lighthouse beacon) |
 | **Stay search & availability** | Date / guest / room validation, deterministic demo inventory, *Available · Limited · Sold Out · Request Required* states, season & weekend pricing, filters and sorting |

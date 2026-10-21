@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js'
 
 /**
  * Small shared "stage" for SHINE's stylised 3D scenes.
@@ -36,7 +37,13 @@ export function createStage(container: HTMLElement, opts: StageOptions) {
 
   const scene = new THREE.Scene()
   scene.background = SKY.day.clone()
-  scene.fog = new THREE.Fog(SKY.day.clone(), 40, 90)
+  // soft studio reflections so water, glass and metal pick up highlights
+  const pmrem = new THREE.PMREMGenerator(renderer)
+  const envTex = pmrem.fromScene(new RoomEnvironment(), 0.04).texture
+  scene.environment = envTex
+  scene.environmentIntensity = 0.35
+  pmrem.dispose()
+  scene.fog = new THREE.Fog(SKY.day.clone(), 55, 120)
 
   const camera = new THREE.PerspectiveCamera(opts.fov ?? 35, 1, 0.1, 200)
   camera.position.set(...opts.camera)
@@ -89,6 +96,8 @@ export function createStage(container: HTMLElement, opts: StageOptions) {
   /** Objects that glow at night (windows, lanterns). */
   const nightLights: THREE.Light[] = []
   const glowMaterials: THREE.MeshStandardMaterial[] = []
+  /** Extra per-scene hooks run when the theme flips. */
+  const nightHooks: ((night: boolean) => void)[] = []
 
   function setNight(night: boolean) {
     const sky = night ? SKY.night : SKY.day
@@ -103,6 +112,8 @@ export function createStage(container: HTMLElement, opts: StageOptions) {
     renderer.toneMappingExposure = night ? 1.25 : 1.05
     nightLights.forEach((l) => (l.visible = night))
     glowMaterials.forEach((m) => (m.emissiveIntensity = night ? 2.2 : 0))
+    scene.environmentIntensity = night ? 0.06 : 0.35
+    nightHooks.forEach((fn) => fn(night))
     invalidate()
   }
 
@@ -230,6 +241,7 @@ export function createStage(container: HTMLElement, opts: StageOptions) {
       if (Array.isArray(mat)) mat.forEach((m) => m.dispose())
       else mat?.dispose?.()
     })
+    envTex.dispose()
     renderer.dispose()
     renderer.domElement.remove()
   }
@@ -241,6 +253,7 @@ export function createStage(container: HTMLElement, opts: StageOptions) {
     renderer,
     nightLights,
     glowMaterials,
+    nightHooks,
     animators,
     setNight,
     bindHotspots,
@@ -333,11 +346,21 @@ export function blob(radius: number, wobble: number, depth: number, material: TH
   return m
 }
 
-/** Gently animated low-poly water plane. */
-export function water(size: number, color: string, segments = 48) {
+/** Gently animated low-poly water plane, lighter in the shallows near the centre. */
+export function water(size: number, color: string, segments = 48, shallow = '#5fc4bf', shallowRadius = 16) {
   const g = new THREE.PlaneGeometry(size, size, segments, segments)
   g.rotateX(-Math.PI / 2)
-  const material = new THREE.MeshStandardMaterial({ color, roughness: 0.35, metalness: 0.1, flatShading: true, transparent: true, opacity: 0.92 })
+  const deep = new THREE.Color(color)
+  const light = new THREE.Color(shallow)
+  const colors = new Float32Array(g.attributes.position.count * 3)
+  const c = new THREE.Color()
+  for (let i = 0; i < g.attributes.position.count; i++) {
+    const d = Math.hypot(g.attributes.position.getX(i), g.attributes.position.getZ(i))
+    c.copy(light).lerp(deep, THREE.MathUtils.smoothstep(d, shallowRadius * 0.55, shallowRadius * 1.6))
+    colors.set([c.r, c.g, c.b], i * 3)
+  }
+  g.setAttribute('color', new THREE.BufferAttribute(colors, 3))
+  const material = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.22, metalness: 0.05, flatShading: true, transparent: true, opacity: 0.95, envMapIntensity: 0.35 })
   const mesh = new THREE.Mesh(g, material)
   mesh.receiveShadow = true
   const pos = g.attributes.position as THREE.BufferAttribute
@@ -353,4 +376,130 @@ export function water(size: number, color: string, segments = 48) {
   }
   animate(0)
   return { mesh, animate }
+}
+
+/** Pulsing ring of surf around a shoreline blob. */
+export function foam(stage: Stage, radius: number, wobble: number, seed: number, y = 0.02) {
+  const m = new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.5, depthWrite: false })
+  const ring = blob(radius, wobble, 0.01, m, seed)
+  ring.position.y = y
+  ring.receiveShadow = false
+  ring.renderOrder = 1
+  stage.scene.add(ring)
+  stage.animators.add((t) => {
+    const k = 1 + Math.sin(t * 0.9) * 0.012
+    ring.scale.set(k, 1, k)
+    m.opacity = 0.32 + Math.sin(t * 0.9 + 1) * 0.14
+  })
+  return ring
+}
+
+function glowTexture(inner: string, outer: string) {
+  const c = document.createElement('canvas')
+  c.width = c.height = 128
+  const ctx = c.getContext('2d')!
+  const g = ctx.createRadialGradient(64, 64, 0, 64, 64, 64)
+  g.addColorStop(0, inner)
+  g.addColorStop(0.25, inner)
+  g.addColorStop(0.32, outer)
+  g.addColorStop(1, 'rgba(255,255,255,0)')
+  ctx.fillStyle = g
+  ctx.fillRect(0, 0, 128, 128)
+  const t = new THREE.CanvasTexture(c)
+  t.colorSpace = THREE.SRGBColorSpace
+  return t
+}
+
+/** Sun by day, moon by night, and a few drifting low-poly clouds. */
+export function atmosphere(stage: Stage, opts: { sun: [number, number, number]; moon: [number, number, number]; clouds?: number }) {
+  const sunMat = new THREE.SpriteMaterial({ map: glowTexture('rgba(255,244,214,1)', 'rgba(255,196,120,0.35)'), depthWrite: false, fog: false, transparent: true })
+  const sun = new THREE.Sprite(sunMat)
+  sun.position.set(...opts.sun)
+  sun.scale.setScalar(16)
+  stage.scene.add(sun)
+  const moonMat = new THREE.SpriteMaterial({ map: glowTexture('rgba(246,240,224,1)', 'rgba(170,196,236,0.25)'), depthWrite: false, fog: false, transparent: true })
+  const moon = new THREE.Sprite(moonMat)
+  moon.position.set(...opts.moon)
+  moon.scale.setScalar(9)
+  moon.visible = false
+  stage.scene.add(moon)
+
+  const cloudMat = new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: 1, flatShading: true, transparent: true, opacity: 0.92 })
+  const clouds: THREE.Group[] = []
+  for (let i = 0; i < (opts.clouds ?? 5); i++) {
+    const g = new THREE.Group()
+    const puffs = 3 + (i % 3)
+    for (let j = 0; j < puffs; j++) {
+      const p = new THREE.Mesh(new THREE.IcosahedronGeometry(1 + ((i + j) % 3) * 0.45, 0), cloudMat)
+      p.position.set(j * 1.4 - puffs * 0.6, Math.sin(j * 2.1) * 0.35, Math.cos(j * 1.3) * 0.6)
+      p.scale.y = 0.65
+      g.add(p)
+    }
+    g.position.set(-50 + i * 21, 7 + (i % 3) * 2.2, -42 - ((i * 17) % 26))
+    g.scale.setScalar(1.3)
+    g.userData.speed = 0.35 + (i % 3) * 0.15
+    clouds.push(g)
+    stage.scene.add(g)
+  }
+  stage.animators.add((_t, dt) => {
+    for (const c of clouds) {
+      c.position.x += c.userData.speed * dt
+      if (c.position.x > 55) c.position.x = -55
+    }
+  })
+  // gradient sky dome: warm horizon fading to blue (day) or ink (night)
+  const domeGeo = new THREE.SphereGeometry(110, 32, 16)
+  const domeColors = new Float32Array(domeGeo.attributes.position.count * 3)
+  domeGeo.setAttribute('color', new THREE.BufferAttribute(domeColors, 3))
+  const dome = new THREE.Mesh(domeGeo, new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.BackSide, fog: false, depthWrite: false }))
+  dome.renderOrder = -1
+  stage.scene.add(dome)
+  const paintSky = (horizon: string, zenith: string) => {
+    const h = new THREE.Color(horizon)
+    const z = new THREE.Color(zenith)
+    const c = new THREE.Color()
+    const pos = domeGeo.attributes.position
+    for (let i = 0; i < pos.count; i++) {
+      const t = THREE.MathUtils.clamp(pos.getY(i) / 110, 0, 1)
+      c.copy(h).lerp(z, Math.pow(t, 0.55))
+      domeColors.set([c.r, c.g, c.b], i * 3)
+    }
+    domeGeo.attributes.color.needsUpdate = true
+    stage.scene.fog?.color.set(horizon)
+  }
+
+  stage.nightHooks.push((night) => {
+    paintSky(night ? '#1c3a47' : '#f1e3c8', night ? '#040d12' : '#8fc3cc')
+    sun.visible = !night
+    moon.visible = night
+    cloudMat.color.set(night ? '#3a5563' : '#ffffff')
+    cloudMat.opacity = night ? 0.55 : 0.92
+  })
+}
+
+/** A small sailing boat circling offshore. */
+export function sailboat(stage: Stage, radius: number, speed = 0.05, y = 0.12) {
+  const b = new THREE.Group()
+  const hull = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.12, 1.8, 6, 1, false, 0, Math.PI), mat('#f7f4ed'))
+  hull.rotation.set(Math.PI / 2, 0, Math.PI / 2)
+  hull.castShadow = true
+  b.add(hull)
+  b.add(cyl(0.025, 0.025, 1.9, mat('#6b4f36'), [0.1, 0.95, 0], 5))
+  const shape = new THREE.Shape()
+  shape.moveTo(0, 0)
+  shape.lineTo(0, 1.7)
+  shape.lineTo(0.95, 0)
+  shape.lineTo(0, 0)
+  const sail = new THREE.Mesh(new THREE.ShapeGeometry(shape), mat('#fffaf0', { side: THREE.DoubleSide, flatShading: false }))
+  sail.position.set(0.12, 0.15, 0)
+  sail.castShadow = true
+  b.add(sail)
+  stage.scene.add(b)
+  stage.animators.add((t) => {
+    const a = t * speed
+    b.position.set(Math.cos(a) * radius, y + Math.sin(t * 1.6) * 0.04, Math.sin(a) * radius * 0.8)
+    b.rotation.y = -a - Math.PI / 2
+    b.rotation.z = Math.sin(t * 1.3) * 0.05
+  })
+  return b
 }

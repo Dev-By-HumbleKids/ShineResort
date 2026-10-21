@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { blob, box, cyl, hipRoof, mat, palm, water, type Stage } from './core'
+import { atmosphere, blob, box, cyl, foam, hipRoof, mat, palm, sailboat, water, type Stage } from './core'
 
 const G = 0.25 // ground level on the island
 
@@ -54,12 +54,12 @@ export function buildIsland(stage: Stage) {
   const { scene } = stage
 
   // sea + seabed glow
-  const sea = water(140, '#2f7f86', 56)
+  const sea = water(160, '#155a66', 64, '#5cc3bb', 11.5)
   scene.add(sea.mesh)
   stage.animators.add((t) => sea.animate(t))
-  const shallow = blob(11.5, 0.18, 0.05, mat('#7fd0c6', { transparent: true, opacity: 0.55, roughness: 0.3 }), 2)
-  shallow.position.y = -0.2
-  scene.add(shallow)
+  foam(stage, 9.75, 0.16, 2, 0.04)
+  atmosphere(stage, { sun: [-46, 9, -62], moon: [-30, 16, -64], clouds: 6 })
+  sailboat(stage, 19, 0.045)
 
   // island
   const sand = blob(9.2, 0.16, 0.5, mat('#ecdcbf'), 2)

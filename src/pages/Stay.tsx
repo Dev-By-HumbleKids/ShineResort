@@ -68,7 +68,7 @@ export default function Stay() {
       <PageHero
         eyebrow="Villas & Suites"
         title="Rooms that open to the sea."
-        image="modernPoolVilla"
+        image="aerialLagoonVillas"
         intro="Five distinct ways to stay — from garden villas hidden in frangipani to a pavilion raised over the lagoon. Every one designed around light, air and the sound of the surf."
       />
 

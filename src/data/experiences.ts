@@ -42,7 +42,7 @@ export const experiences: Experience[] = [
     conditionNote: WEATHER,
     confirmation: 'instant',
     image: 'longtailBoats',
-    gallery: ['islandBay', 'islandLagoon', 'rockIsland'],
+    gallery: ['aerialLongtails', 'karstLagoon', 'islandLagoon'],
   },
   {
     id: 'boat-charter',
@@ -70,7 +70,7 @@ export const experiences: Experience[] = [
     conditionNote: WEATHER,
     confirmation: 'concierge',
     image: 'yacht',
-    gallery: ['yachtWhite', 'aerialShore'],
+    gallery: ['yachtWhite', 'aerialLagoonVillas'],
   },
   {
     id: 'horse-riding',
@@ -97,8 +97,8 @@ export const experiences: Experience[] = [
     safety: ['Riders 8+ only, max 100 kg', 'Helmets required', 'Rides follow tide times and may be shortened in rough conditions'],
     conditionNote: 'Weather- and tide-dependent. Rides are not offered in heavy rain or high tides.',
     confirmation: 'instant',
-    image: 'horseBeach',
-    gallery: ['horseRunning', 'horsePortrait'],
+    image: 'horsesPair',
+    gallery: ['horseBeach', 'horseRunning', 'horsePortrait'],
   },
   {
     id: 'sunset-cruise',
@@ -123,7 +123,8 @@ export const experiences: Experience[] = [
     safety: ['Life jackets available for all guests'],
     conditionNote: WEATHER,
     confirmation: 'instant',
-    image: 'sunsetBoat',
+    image: 'sailboat',
+    gallery: ['palmReflection', 'beachRocksSunset'],
   },
   {
     id: 'snorkeling',
@@ -193,7 +194,7 @@ export const experiences: Experience[] = [
     safety: ['Lagoon zone only', 'Lifeguard supervision during operating hours'],
     conditionNote: 'Offered in calm conditions only.',
     confirmation: 'instant',
-    image: 'aerialShore',
+    image: 'aerialBoat',
   },
   {
     id: 'photo-session',

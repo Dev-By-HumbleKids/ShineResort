@@ -22,9 +22,12 @@ export function RoomFacts({ room, className = '' }: { room: Room; className?: st
 export function RoomCard({ room, availability, nightsTotal }: { room: Room; availability?: RoomAvailability; nightsTotal?: number }) {
   return (
     <TiltCard className="h-full">
-      <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-card shadow-[0_20px_60px_-35px_rgb(16_44_53/0.5)] ring-1 ring-line">
+      <article data-cursor="View" className="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-card shadow-[0_20px_60px_-35px_rgb(16_44_53/0.5)] ring-1 ring-line">
         <div className="relative aspect-[4/5] overflow-hidden">
           <Img name={room.images[0]} alt={`${room.name} interior`} sizes="(min-width: 1024px) 30vw, 85vw" className="img-cover transition duration-[1.6s] ease-[var(--ease-tide)] group-hover:scale-105" />
+          <div className="absolute inset-0 scale-110 opacity-0 transition-[opacity,scale] duration-[1.2s] ease-[var(--ease-tide)] group-hover:scale-100 group-hover:opacity-100">
+            <Img name={room.images[1]} alt="" sizes="(min-width: 1024px) 30vw, 85vw" className="img-cover" />
+          </div>
           <div className="absolute inset-0 bg-linear-to-t from-midnight/80 via-transparent to-transparent" />
           {availability && <StatusBadge status={availability.status} className="absolute left-4 top-4" />}
           <div className="absolute inset-x-0 bottom-0 p-6 text-pearl" style={{ transform: 'translateZ(40px)' }}>

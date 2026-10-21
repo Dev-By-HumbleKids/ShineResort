@@ -1,10 +1,16 @@
+import { ArrowUp } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { scrollToTop } from '../../lib/scroll'
+import { WaveEdge } from '../fx/Decor'
 import { Logo } from './Logo'
 import { navItems } from './Header'
 
 export function Footer() {
   return (
+    <>
+    <WaveEdge color="var(--color-midnight)" className="relative z-10 -mb-px -mt-16 md:-mt-24" />
     <footer className="relative overflow-hidden bg-midnight text-pearl">
+      <div aria-hidden className="pointer-events-none absolute bottom-0 left-1/2 size-[56rem] -translate-x-1/2 translate-y-1/2 animate-[lantern_7s_ease-in-out_infinite] rounded-full bg-[radial-gradient(circle,rgb(199_166_106/0.14),transparent_60%)]" />
       <div className="container-x relative py-20 md:py-28">
         <div className="grid gap-14 md:grid-cols-12">
           <div className="md:col-span-5">
@@ -51,12 +57,21 @@ export function Footer() {
             © {new Date().getFullYear()} SHINE is a <strong className="text-pearl/80">fictional resort</strong> created for a frontend portfolio. All content, prices and
             availability are demonstration data.
           </p>
-          <p className="mt-3 md:mt-0">Photography via Unsplash.</p>
+          <div className="mt-3 flex items-center gap-6 md:mt-0">
+            <p>Photography via Unsplash.</p>
+            <button onClick={() => scrollToTop(false)} className="group flex items-center gap-2 uppercase tracking-[0.2em] text-pearl/70 hover:text-pearl">
+              Back to top
+              <span className="grid size-9 place-items-center rounded-full border border-pearl/25 transition group-hover:-translate-y-1 group-hover:border-gold group-hover:text-gold">
+                <ArrowUp className="size-4" aria-hidden />
+              </span>
+            </button>
+          </div>
         </div>
       </div>
       <p aria-hidden className="pointer-events-none select-none text-center font-serif text-[24vw] leading-[0.75] text-pearl/[0.04]">
         SHINE
       </p>
     </footer>
+    </>
   )
 }

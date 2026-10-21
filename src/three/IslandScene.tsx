@@ -30,7 +30,7 @@ export default function IslandScene() {
     if (!el) return
     let stage: Stage
     try {
-      stage = createStage(el, { camera: [15, 12, 19], target: [0, 0, 1.5], minDistance: 14, maxDistance: 38 })
+      stage = createStage(el, { camera: [17, 8.5, 21], target: [0, 1.2, 0], minDistance: 14, maxDistance: 38 })
     } catch {
       setFailed(true)
       return

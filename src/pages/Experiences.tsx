@@ -81,7 +81,7 @@ export default function Experiences() {
                 className="group flex flex-col"
               >
                 <TiltCard max={5}>
-                  <Link to={`/experiences/${e.id}${cat !== 'all' ? `?c=${cat}` : ''}`} preventScrollReset className="relative block aspect-[4/5] overflow-hidden rounded-[1.75rem]" aria-label={`View details: ${e.title}`}>
+                  <Link to={`/experiences/${e.id}${cat !== 'all' ? `?c=${cat}` : ''}`} preventScrollReset data-cursor="Explore" className="relative block aspect-[4/5] overflow-hidden rounded-[1.75rem]" aria-label={`View details: ${e.title}`}>
                     <Img name={e.image} alt="" sizes="(min-width:1024px) 30vw, (min-width:640px) 45vw, 90vw" className="img-cover transition duration-[1.6s] group-hover:scale-110" />
                     <div className="absolute inset-0 bg-linear-to-t from-midnight/70 via-transparent to-transparent" />
                     <span className="absolute left-4 top-4 rounded-full bg-pearl/90 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.15em] text-midnight">

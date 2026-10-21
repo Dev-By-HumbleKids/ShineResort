@@ -63,12 +63,12 @@ export const rooms: Room[] = [
       'Smart TV',
       'High-speed Wi-Fi',
     ],
-    images: ['thatchVillas', 'roomWarm', 'villaTropical', 'roomClassic'],
+    images: ['gardenPoolVilla', 'roomWarm', 'thatchVillas', 'roomClassic'],
     model: { width: 6.5, depth: 6, storeys: 1, roof: 'hip', pool: false, stilts: false, bedrooms: 1 },
     hotspots: [
       { id: 'bed', label: 'Teak bedroom', detail: 'Vaulted timber ceiling, cool all day.', image: 'roomWarm', position: [-1.5, 0.9, -1.5] },
       { id: 'shower', label: 'Garden shower', detail: 'Open-air rain shower under the palms.', image: 'roomClassic', position: [2.1, 0.9, -1.7] },
-      { id: 'sala', label: 'Daybed sala', detail: 'Read, nap, repeat.', image: 'villaTropical', position: [0, 0.6, 4.2] },
+      { id: 'sala', label: 'Daybed sala', detail: 'Read, nap, repeat.', image: 'thatchVillas', position: [0, 0.6, 4.2] },
     ],
   },
   {

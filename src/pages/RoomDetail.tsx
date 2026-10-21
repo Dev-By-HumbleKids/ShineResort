@@ -57,6 +57,7 @@ export default function RoomDetail() {
             <button
               key={im}
               onClick={() => setLb(i)}
+              data-cursor="View"
               className="group relative aspect-[4/3] overflow-hidden rounded-2xl"
               aria-label={`Open photo ${i + 1} of ${room.images.length}`}
             >

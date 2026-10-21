@@ -29,7 +29,7 @@ export const facilities: Facility[] = [
     description: 'Six hundred metres of pale sand reserved for SHINE guests, with thatched cabanas, deep loungers and a beach butler who appears with chilled towels.',
     details: ['Lifeguard 08:00 – 18:00', 'Cabanas & daybeds', 'Beach butler service', 'Sunset fire pit'],
     hours: 'Sunrise – sunset',
-    image: 'beachSwing',
+    image: 'beachLoungers',
     cta: { label: 'Explore beach experiences', to: '/experiences?c=beach' },
   },
   {

@@ -1,8 +1,9 @@
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, useScroll, useSpring } from 'framer-motion'
 import { CalendarCheck, Menu, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { lockScroll } from '../../lib/scroll'
+import { Magnetic } from '../fx/Magnetic'
 import { Logo } from './Logo'
 import { ThemeToggle } from './ThemeToggle'
 
@@ -20,6 +21,8 @@ export function Header() {
   const [hidden, setHidden] = useState(false)
   const [open, setOpen] = useState(false)
   const { pathname } = useLocation()
+  const { scrollYProgress } = useScroll()
+  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30, restDelta: 0.001 })
 
   useEffect(() => {
     let last = window.scrollY
@@ -68,8 +71,8 @@ export function Header() {
             <Logo />
           </Link>
 
-          <nav aria-label="Primary" className="hidden lg:block">
-            <ul className="flex items-center gap-8 text-[0.72rem] font-semibold uppercase tracking-[0.2em]">
+          <nav aria-label="Primary" className="hidden xl:block">
+            <ul className="flex items-center gap-7 whitespace-nowrap text-[0.7rem] font-semibold uppercase tracking-[0.2em] 2xl:gap-9">
               {navItems.map((n) => (
                 <li key={n.to}>
                   <NavLink to={n.to} className="link-underline pb-1">
@@ -90,11 +93,13 @@ export function Header() {
             >
               <CalendarCheck className="size-[18px]" />
             </Link>
-            <Link to="/book" className="btn btn-gold hidden sm:inline-flex">
-              Book Your Stay
-            </Link>
+            <Magnetic className="hidden sm:inline-flex">
+              <Link to="/book" className="btn btn-gold" data-cursor="Book">
+                Book Your Stay
+              </Link>
+            </Magnetic>
             <button
-              className="grid size-11 place-items-center rounded-full border border-current/25 lg:hidden"
+              className="grid size-11 place-items-center rounded-full border border-current/25 xl:hidden"
               onClick={() => setOpen((o) => !o)}
               aria-expanded={open}
               aria-controls="mobile-menu"
@@ -104,13 +109,14 @@ export function Header() {
             </button>
           </div>
         </div>
+        <motion.span aria-hidden style={{ scaleX: progress }} className={`absolute inset-x-0 bottom-0 h-px origin-left bg-gold transition-opacity duration-500 ${solid ? 'opacity-100' : 'opacity-0'}`} />
       </motion.header>
 
       <AnimatePresence>
         {open && (
           <motion.div
             id="mobile-menu"
-            className="fixed inset-0 z-40 flex flex-col bg-midnight text-pearl lg:hidden"
+            className="fixed inset-0 z-40 flex flex-col bg-midnight text-pearl xl:hidden"
             initial={{ clipPath: 'circle(0% at 100% 0%)' }}
             animate={{ clipPath: 'circle(150% at 100% 0%)' }}
             exit={{ clipPath: 'circle(0% at 100% 0%)' }}

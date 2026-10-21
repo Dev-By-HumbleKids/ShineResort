@@ -38,7 +38,7 @@ export default function Gallery() {
                 transition={{ duration: 0.5, delay: Math.min(i, 8) * 0.03 }}
                 className={g.shape === 'tall' ? 'row-span-2' : g.shape === 'wide' ? 'col-span-2' : ''}
               >
-                <button onClick={() => setOpen(i)} className="group relative h-full w-full overflow-hidden rounded-2xl" aria-label={`Open photo: ${g.alt}`}>
+                <button onClick={() => setOpen(i)} data-cursor="View" className="group relative h-full w-full overflow-hidden rounded-2xl" aria-label={`Open photo: ${g.alt}`}>
                   <Img name={g.image} alt={g.alt} sizes="(min-width:768px) 25vw, 50vw" width={900} className="img-cover transition duration-[1.4s] group-hover:scale-110" />
                   <span className="absolute inset-0 bg-midnight/0 transition group-hover:bg-midnight/30" />
                   <span className="absolute bottom-3 left-3 rounded-full bg-pearl/90 px-2.5 py-1 text-[0.6rem] font-semibold uppercase tracking-[0.15em] text-midnight opacity-0 transition group-hover:opacity-100 group-focus-visible:opacity-100">

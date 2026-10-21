@@ -99,6 +99,19 @@ const ids = {
   steak: '1600891964092-4316c288032e',
   noodleBowl: '1559847844-5315695dadae',
   grillPlatter: '1544025162-d76694265947',
+  // curated hero & detail additions
+  villaLoungeDusk: '1561501878-aabd62634533',
+  palmReflection: '1505881402582-c5bc11054f91',
+  gardenPoolVilla: '1582610116397-edb318620f90',
+  balconySunset: '1615880484746-a134be9a6ecf',
+  beachLoungers: '1602002418816-5c0aeef426aa',
+  aerialLagoonVillas: '1540202404-a2f29016b523',
+  aerialBoat: '1578922746465-3a80a228f223',
+  aerialLongtails: '1506929562872-bb421503ef21',
+  karstLagoon: '1519451241324-20b4ea2c4220',
+  beachRocksSunset: '1542259009477-d625272157b7',
+  sailboat: '1540946485063-a40da27545f8',
+  horsesPair: '1452378174528-3090a4bba7b2',
 } as const
 
 export type ImageKey = keyof typeof ids
@@ -110,4 +123,9 @@ export function img(key: ImageKey, w = 1600, h?: number) {
 
 export function srcSet(key: ImageKey, widths = [480, 800, 1200, 1800]) {
   return widths.map((w) => `${img(key, w)} ${w}w`).join(', ')
+}
+
+/** ~1 kB blurred preview used as a placeholder while the full image loads. */
+export function lqip(key: ImageKey) {
+  return `https://images.unsplash.com/photo-${ids[key]}?auto=format&fit=crop&w=32&q=30&blur=40`
 }

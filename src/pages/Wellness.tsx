@@ -27,14 +27,15 @@ export default function Wellness() {
         eyebrow="Lumina Spa & Wellness"
         title="Slow down to the rhythm of the tide."
         image="spaMassage"
+        edge="var(--bg-alt)"
         intro="Six treatment pavilions set in a garden of ginger and frangipani, with rituals that draw on Myanmar’s traditions — thanaka, coconut, lemongrass and warm stone."
       />
 
       {/* calm, warm editorial palette, distinct from the ocean sections */}
-      <section className="bg-[#efe6d7] py-24 text-charcoal md:py-32 [[data-theme=night]_&]:bg-[#1a2a28] [[data-theme=night]_&]:text-pearl">
+      <section className="bg-bg-alt py-24 text-ink md:py-32">
         <div className="container-x grid items-center gap-14 lg:grid-cols-2">
           <MaskReveal className="aspect-[4/5] rounded-t-full">
-            <Img name="spaStones" alt="Spa towels, oil and orchids on a timber shelf" sizes="(min-width:1024px) 45vw, 100vw" className="img-cover" />
+            <Img name="spaHotStone" alt="Warm stones placed along the back during a massage" sizes="(min-width:1024px) 45vw, 100vw" className="img-cover" />
           </MaskReveal>
           <div>
             <SectionHeading

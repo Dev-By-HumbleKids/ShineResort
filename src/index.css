@@ -306,6 +306,32 @@
     transform: scale(1);
   }
 }
+@keyframes glare {
+  from {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.8;
+  }
+  to {
+    transform: translate(-8%, 6%) scale(1.15);
+    opacity: 1;
+  }
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes lantern {
+  0%,
+  100% {
+    opacity: 0.75;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
 @keyframes scroll-cue {
   0% {
     transform: translateY(-100%);

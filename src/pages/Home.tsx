@@ -2,6 +2,7 @@ import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion'
 import { ArrowRight, ArrowUpRight, Clock, Quote } from 'lucide-react'
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { CountUp, Marquee, WaveEdge } from '../components/fx/Decor'
 import { Hero } from '../components/home/Hero'
 import { RoomCard } from '../components/rooms/RoomCard'
 import { SectionHeading } from '../components/ui/bits'
@@ -21,8 +22,11 @@ export default function Home() {
       <Hero />
       <Intro />
       <VillasStrip />
+      <Marquee items={['Island hopping', 'Sunrise rides', 'Lantern-lit dinners', 'Longtail boats', 'Thanaka rituals', 'Golden hours']} className="text-ink/90" />
+      <WaveEdge color="var(--color-midnight)" />
       <IslandMap />
       <BeyondTheShore />
+      <WaveEdge color="var(--color-midnight)" flip className="-mt-px" />
       <Facilities />
       <Reviews />
       <ClosingCta />
@@ -64,7 +68,7 @@ function Intro() {
               <Reveal key={s.l} delay={i * 0.08}>
                 <dt className="sr-only">{s.l}</dt>
                 <dd>
-                  <span className="block font-serif text-5xl md:text-6xl">{s.n}</span>
+                  <CountUp value={s.n} className="block font-serif text-5xl md:text-6xl" />
                   <span className="mt-2 block text-sm text-muted">{s.l}</span>
                 </dd>
               </Reveal>
@@ -74,16 +78,17 @@ function Intro() {
         <div className="relative h-[520px] sm:h-[640px] lg:col-span-6">
           <motion.div style={{ y: y1 }} className="absolute right-0 top-0 h-[78%] w-[78%]">
             <MaskReveal className="h-full rounded-[2rem]">
-              <Img name="resortCourtyard" alt="Courtyard pool framed by tropical gardens" sizes="(min-width:1024px) 40vw, 80vw" className="img-cover" />
+              <Img name="thatchVillas" alt="Thatched villas and pool framed by tropical gardens" sizes="(min-width:1024px) 40vw, 80vw" className="img-cover" />
             </MaskReveal>
           </motion.div>
           <motion.div style={{ y: y2 }} className="absolute bottom-0 left-0 h-[48%] w-[52%] overflow-hidden rounded-[2rem] border-8 border-bg shadow-2xl">
             <Img name="resortLodge" alt="Teak reception pavilion under a pitched roof" sizes="(min-width:1024px) 25vw, 50vw" className="img-cover" />
           </motion.div>
           <motion.p
-            style={{ y: y2 }}
-            className="absolute bottom-[52%] left-[4%] hidden max-w-[11rem] font-serif text-lg italic leading-snug text-muted sm:block"
+            style={{ y: y1 }}
+            className="absolute -bottom-6 right-0 hidden max-w-[15rem] text-right font-serif text-lg italic leading-snug text-muted sm:block"
           >
+            <span className="mb-2 ml-auto block h-px w-10 bg-gold" aria-hidden />
             Reclaimed teak, laterite stone, lime plaster.
           </motion.p>
         </div>
@@ -147,7 +152,7 @@ function IslandMap() {
     return () => io.disconnect()
   }, [])
   return (
-    <section className="bg-midnight py-28 text-pearl md:py-36" aria-labelledby="map-h">
+    <section className="-mt-px bg-midnight py-28 text-pearl md:py-36" aria-labelledby="map-h">
       <div className="container-x">
         <div className="grid gap-10 md:grid-cols-2 md:items-end">
           <div id="map-h">
@@ -161,7 +166,7 @@ function IslandMap() {
           </Reveal>
         </div>
         <Reveal className="mt-14">
-          <div ref={ref} className="relative h-[68vh] min-h-[420px] overflow-hidden rounded-[2rem] bg-teal ring-1 ring-pearl/10">
+          <div ref={ref} data-cursor="Drag" className="relative h-[68vh] min-h-[420px] overflow-hidden rounded-[2rem] bg-teal shadow-[0_40px_120px_-40px_rgb(0_0_0/0.6)] ring-1 ring-pearl/10">
             {show ? (
               <Suspense fallback={<div className="skeleton absolute inset-0 opacity-20" />}>
                 <IslandScene />
@@ -200,6 +205,7 @@ function BeyondTheShore() {
             <Reveal key={e.id} delay={i * 0.08} className={i === 0 ? 'lg:col-span-7 lg:row-span-2' : i === 1 ? 'lg:col-span-5' : i === 2 ? 'lg:col-span-5' : 'lg:col-span-12'}>
               <Link
                 to={`/experiences/${e.id}`}
+                data-cursor="Explore"
                 className={`group relative block overflow-hidden rounded-[1.75rem] ${i === 0 ? 'h-[460px] lg:h-full' : i === 3 ? 'h-[340px]' : 'h-[300px]'}`}
               >
                 <Img name={e.image} alt={e.title} sizes="(min-width:1024px) 50vw, 100vw" className="img-cover transition duration-[1.8s] group-hover:scale-110" />
@@ -349,9 +355,10 @@ function ClosingCta() {
   return (
     <section className="relative overflow-hidden bg-midnight py-40 text-pearl md:py-56">
       <div className="absolute inset-0">
-        <Img name="beachSunset" alt="" className="img-cover opacity-60" />
+        <Img name="beachRocksSunset" alt="" className="img-cover animate-[kenburns_20s_ease-out_both] opacity-70" />
       </div>
       <div className="absolute inset-0 bg-linear-to-t from-midnight via-midnight/30 to-midnight/50" />
+      <div aria-hidden className="absolute left-1/2 top-1/2 size-[40rem] -translate-x-1/2 -translate-y-1/2 animate-[lantern_6s_ease-in-out_infinite] rounded-full bg-[radial-gradient(circle,rgb(199_166_106/0.22),transparent_60%)]" />
       <div className="container-x relative text-center">
         <Reveal>
           <p className="eyebrow text-gold">Stay by the sea. Discover beyond the shore.</p>

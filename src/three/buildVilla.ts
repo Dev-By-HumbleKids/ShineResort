@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import type { Room } from '../data/types'
-import { blob, box, cyl, hipRoof, mat, palm, water, type Stage } from './core'
+import { atmosphere, blob, box, cyl, foam, hipRoof, mat, palm, sailboat, water, type Stage } from './core'
 
 const WALL_H = 2.6
 
@@ -22,7 +22,7 @@ export function buildVilla(stage: Stage, room: Room) {
 
   // ---------- setting ----------
   if (stilts) {
-    const sea = water(80, '#3b9a9c', 40)
+    const sea = water(80, '#1d6670', 48, '#6fd0c4', 12)
     sea.mesh.position.y = 0
     scene.add(sea.mesh)
     stage.animators.add((t) => sea.animate(t))
@@ -30,17 +30,21 @@ export function buildVilla(stage: Stage, room: Room) {
     sandbar.position.set(-9, -0.4, -6)
     scene.add(sandbar)
   } else {
-    const sea = water(80, '#2f7f86', 32)
+    const sea = water(80, '#1d6670', 40, '#6fd0c4', Math.max(w, d) * 1.6)
     sea.mesh.position.y = -0.35
     scene.add(sea.mesh)
     stage.animators.add((t) => sea.animate(t))
     const ground = blob(Math.max(w, d) * 1.25, 0.12, 0.3, mat('#ecdcbf'), 4)
     ground.position.y = -0.35
     scene.add(ground)
+    foam(stage, Math.max(w, d) * 1.25 + 0.45, 0.12, 4, -0.24)
     const lawn = blob(Math.max(w, d) * 0.85, 0.15, 0.05, mat(room.view === 'Garden' ? '#6f8d62' : '#7d9a6b'), 6)
     lawn.position.set(0, -0.08, -1)
     scene.add(lawn)
   }
+
+  atmosphere(stage, { sun: [-40, 9, -58], moon: [-26, 15, -60], clouds: 4 })
+  sailboat(stage, Math.max(w, d) * 2.4 + 6, 0.05, stilts ? 0.12 : -0.2)
 
   const house = new THREE.Group()
   scene.add(house)
