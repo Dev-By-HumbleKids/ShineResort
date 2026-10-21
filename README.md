@@ -1,5 +1,7 @@
 # SHINE — Luxury Beach Resort & Island Escape
 
+**Live demo → https://dev-by-humblekids.github.io/ShineResort/**
+
 > *“Where the Ocean Meets Extraordinary.”*
 > Stay by the sea. Discover beyond the shore.
 
@@ -53,7 +55,7 @@ Requires Node 18+.
 
 ### Deploy to GitHub Pages
 
-The build uses relative asset paths (`base: './'`) and hash routing, so the contents of `dist/` can be published as-is — e.g. with the *GitHub Pages* action or by pushing `dist/` to a `gh-pages` branch.
+Every push to `main` is built and published by `.github/workflows/deploy.yml`. The build uses relative asset paths (`base: './'`) and hash routing, so it works under any Pages sub-path.
 
 ## Project structure
 
