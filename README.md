@@ -112,7 +112,7 @@ Not tested: Safari/Firefox, real mobile hardware, screen-reader walkthroughs.
 ## Credits
 
 - Photography: [Unsplash](https://unsplash.com) (Unsplash License), used illustratively for a fictional brand
-- Brand, copy, 3D models and code: original work for this portfolio project
+- Design & development: **KoonSett (Win Thant Aung)** — [Dev-By-HumbleKids](https://github.com/Dev-By-HumbleKids)
 
 ## License
 

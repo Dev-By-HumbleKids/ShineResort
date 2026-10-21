@@ -52,7 +52,19 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-20 border-t border-pearl/10 pt-8 text-xs leading-relaxed text-pearl/55 md:flex md:items-center md:justify-between">
+        <div className="mt-20 flex flex-col gap-2 border-t border-pearl/10 pt-8 sm:flex-row sm:items-baseline sm:justify-between">
+          <p className="text-[0.65rem] font-semibold uppercase tracking-[0.25em] text-pearl/50">Designed & developed by</p>
+          <a
+            href="https://github.com/Dev-By-HumbleKids"
+            target="_blank"
+            rel="noreferrer"
+            className="group font-serif text-2xl text-pearl transition hover:text-gold md:text-3xl"
+          >
+            KoonSett <span className="italic text-pearl/60 transition group-hover:text-gold/80">(Win Thant Aung)</span>
+          </a>
+        </div>
+
+        <div className="mt-8 border-t border-pearl/10 pt-8 text-xs leading-relaxed text-pearl/55 md:flex md:items-center md:justify-between">
           <p>
             © {new Date().getFullYear()} SHINE is a <strong className="text-pearl/80">fictional resort</strong> created for a frontend portfolio. All content, prices and
             availability are demonstration data.
