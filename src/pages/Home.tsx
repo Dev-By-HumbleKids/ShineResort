@@ -4,6 +4,7 @@ import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { CountUp, Marquee, WaveEdge } from '../components/fx/Decor'
 import { Hero } from '../components/home/Hero'
+import { Location } from '../components/home/Location'
 import { RoomCard } from '../components/rooms/RoomCard'
 import { SectionHeading } from '../components/ui/bits'
 import { Img } from '../components/ui/Img'
@@ -29,6 +30,7 @@ export default function Home() {
       <WaveEdge color="var(--color-midnight)" flip className="-mt-px" />
       <Facilities />
       <Reviews />
+      <Location />
       <ClosingCta />
     </>
   )

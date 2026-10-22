@@ -47,6 +47,7 @@ export function Footer() {
                 <p>Ngwe Saung Beach<br />Ayeyarwady Region, Myanmar</p>
                 <p>Around 5 hours by road from Yangon</p>
                 <p className="text-pearl/50">Fictional address — demo only</p>
+                <p><Link className="link-underline text-gold hover:text-pearl" to="/#location">View on the map →</Link></p>
               </address>
             </div>
           </div>

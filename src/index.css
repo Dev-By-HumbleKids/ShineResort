@@ -400,3 +400,8 @@ html.lenis body {
     cursor: url('./assets/cursor-magnifier-dark.svg') 15 15, not-allowed;
   }
 }
+
+/* Google Map follows the Day / Night theme */
+[data-theme='night'] .map-frame {
+  filter: invert(0.92) hue-rotate(180deg) saturate(0.7) brightness(0.95);
+}
