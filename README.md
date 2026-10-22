@@ -2,6 +2,10 @@
 
 **Live demo → https://dev-by-humblekids.github.io/ShineResort/**
 
+<a href="https://dev-by-humblekids.github.io/ShineResort/">
+  <img src="docs/screenshots/hero.jpg" alt="SHINE home page — cinematic hero with stay search" width="100%" />
+</a>
+
 > *“Where the Ocean Meets Extraordinary.”*
 > Stay by the sea. Discover beyond the shore.
 
@@ -11,21 +15,59 @@ A frontend portfolio project: the website of **SHINE**, a **fictional** five-sta
 
 ---
 
+## Screenshots
+
+<table>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/island-3d.jpg" alt="3D resort island by day" /></td>
+    <td width="50%"><img src="docs/screenshots/island-3d-night.jpg" alt="3D resort island at night" /></td>
+  </tr>
+  <tr>
+    <td>3D resort island — drag to explore, tap a marker to open that place</td>
+    <td>The same island at night: lanterns, lit windows and the lighthouse beacon</td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/villa-3d.jpg" alt="Cut-away 3D villa with hotspots" /></td>
+    <td width="50%"><img src="docs/screenshots/tea-set.jpg" alt="Myanmar mont tea set with tier explorer" /></td>
+  </tr>
+  <tr>
+    <td>Cut-away 3D villa with numbered hotspots linked to photography</td>
+    <td>Myanmar mont tea set — explore each tier of the stand</td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/menu.jpg" alt="Menu explorer with photo cards" /></td>
+    <td width="50%"><img src="docs/screenshots/experience-journey.jpg" alt="Experience day timeline" /></td>
+  </tr>
+  <tr>
+    <td>Menu explorer — photo cards, search, dietary filters and pairings</td>
+    <td>Every experience shows your day, moment by moment, before you book</td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/spa.jpg" alt="Spa treatment journeys" /></td>
+    <td width="50%"><img src="docs/screenshots/location.jpg" alt="Google Map location on Ngwe Saung Beach" /></td>
+  </tr>
+  <tr>
+    <td>Spa treatments as photo journeys, step by step</td>
+    <td>“Getting here” — Google Map pin on Ngwe Saung Beach, directions and travel times</td>
+  </tr>
+</table>
+
 ## Highlights
 
 | Area | What it shows |
 | --- | --- |
 | **Opening & transitions** | Once-per-visit lantern intro, a midnight “tide” curtain between pages, blur-up image loading, scroll-progress line |
 | **Cinematic hero** | Crossfading 4-slide slideshow with Ken Burns, golden glare, pause control, live Ngwe Saung local time and today’s sunset (computed with the NOAA solar equations) |
-| **Micro-interactions** | Follower cursor with contextual labels (View / Drag / Explore), magnetic CTAs, 3D tilt cards with image swap, count-up stats, marquee, animated wave edges |
-| **3D Resort Island** | Stylised Three.js model of the whole property — gradient sky dome, sun/moon, drifting clouds, depth-tinted lagoon, pulsing surf, a sailboat circling offshore; drag to orbit, glowing markers link to villas, dining, spa, jetty, horse riding and *Pearl Cay* |
+| **Micro-interactions** | Magnifying-glass cursor with contextual labels (View / Drag / Explore), magnetic CTAs, 3D tilt cards with image swap, count-up stats, marquee, animated wave edges |
+| **3D Resort Island** | Three.js model of the whole property — physically-based sky, custom ocean shader (waves, fresnel reflections, sun glint, clear shallows, rolling surf), procedural sand / timber / thatch textures, curved palms, bloom-lit lanterns at night; drag to orbit, glowing markers link to villas, dining, spa, jetty, horse riding and *Pearl Cay* |
 | **3D “dollhouse” villas** | Every room type is generated from data as a cut-away model (roof lifts, stilts over the lagoon, private pools, two storeys) with numbered hotspots linked to real photography — loaded only on demand |
 | **Day ↔ Night** | One toggle switches the whole site *and* the 3D lighting from sunlit shore to lantern-lit night (stars, glowing windows, lighthouse beacon) |
-| **Stay search & availability** | Date / guest / room validation, deterministic demo inventory, *Available · Limited · Sold Out · Request Required* states, season & weekend pricing, filters and sorting |
+| **Stay search & availability** | Custom two-month range calendar with nightly “from” prices and presets, date / guest / room validation, deterministic demo inventory, *Available · Limited · Sold Out · Request Required* states, season & weekend pricing, filters and sorting |
 | **Room booking flow** | 5 steps — dates → room → extras → guest details → review — with an itemised, transparent price summary and a generated booking reference |
-| **Beyond the Shore** | 13 bookable experiences (island excursion, boat charter, beach horse riding, sunset cruise, snorkelling…) with working category filters, packages, add-ons, participant limits, weather notes and *instant vs. concierge* confirmation |
-| **Dining** | Four venues, an animated menu explorer (8 sections + dietary filters) and table reservations |
-| **Lumina Spa** | Calm, warm-neutral design with a treatment menu and appointment form |
+| **Beyond the Shore** | 13 bookable experiences (island excursion, boat charter, beach horse riding, sunset cruise, snorkelling…) — each with highlights, a photo timeline of the day and package comparison cards; filters, add-ons, participant limits, weather notes, *instant vs. concierge* confirmation and an “Explore first” shortcut |
+| **Dining** | Four venues, 8 curated menu sets (led by a Myanmar *mont* tea stand with Myanmar-script names), a photo-card menu explorer with search, dietary filters, chef’s notes and pairings, and table reservations that pre-fill from a chosen set |
+| **Lumina Spa** | Treatments as photo journeys — every step, ingredients and who it suits — with an appointment form |
+| **Getting here** | Google Map pinned on an undeveloped stretch of Ngwe Saung Beach, directions, live local time and sunset |
 | **Our Story** | Scroll-driven word reveal, sticky timeline 1968 → today, values, interactive SVG site plan + architectural gallery |
 | **Gallery** | Filterable masonry with an accessible lightbox (← → Esc) |
 | **My Reservations** | Look up a booking by reference + last name; status timeline; guest data hidden from the device list |
