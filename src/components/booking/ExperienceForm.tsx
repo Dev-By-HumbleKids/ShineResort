@@ -59,7 +59,7 @@ export function ExperienceForm({ exp, onDone }: { exp: Experience; onDone: () =>
           {exp.packages.map((p, i) => (
             <label
               key={p.id}
-              className={`flex cursor-pointer items-center justify-between gap-4 rounded-xl border p-4 transition ${p.id === pkgId ? 'border-ink bg-card' : 'border-line hover:border-muted'}`}
+              className={`flex items-center justify-between gap-4 rounded-xl border p-4 transition ${p.id === pkgId ? 'border-ink bg-card' : 'border-line hover:border-muted'}`}
             >
               <span className="flex items-center gap-3">
                 <input type="radio" name={`${id}-pkg`} value={p.id} checked={p.id === pkgId} onChange={() => setPkgId(p.id)} className="accent-[var(--color-teal)]" data-autofocus={i === 0 ? true : undefined} />
@@ -115,7 +115,7 @@ export function ExperienceForm({ exp, onDone }: { exp: Experience; onDone: () =>
           <legend className="mb-3 font-serif text-2xl">Optional add-ons</legend>
           <div className="grid gap-2">
             {exp.addOns.map((a) => (
-              <label key={a.id} className="flex cursor-pointer items-center justify-between gap-4 rounded-xl border border-line p-4 transition hover:border-muted has-[:checked]:border-ink has-[:checked]:bg-card">
+              <label key={a.id} className="flex items-center justify-between gap-4 rounded-xl border border-line p-4 transition hover:border-muted has-[:checked]:border-ink has-[:checked]:bg-card">
                 <span className="flex items-center gap-3 text-sm">
                   <input
                     type="checkbox"
@@ -142,7 +142,7 @@ export function ExperienceForm({ exp, onDone }: { exp: Experience; onDone: () =>
           <CloudSun className="size-5 shrink-0 text-accent" aria-hidden />
           <p>{exp.conditionNote}</p>
         </div>
-        <label className="flex cursor-pointer items-start gap-3 text-sm">
+        <label className="flex items-start gap-3 text-sm">
           <input type="checkbox" checked={ack} onChange={(e) => setAck(e.target.checked)} className="mt-1 size-4 accent-[var(--color-teal)]" aria-invalid={!!errors.ack} data-ack-error={errors.ack ? true : undefined} />
           <span>I understand this experience depends on weather and operating conditions and may be rescheduled for safety.</span>
         </label>

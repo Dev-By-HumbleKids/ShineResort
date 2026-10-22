@@ -372,3 +372,30 @@ html.lenis body {
 .lenis.lenis-stopped {
   overflow: hidden;
 }
+
+/* Magnifying-glass pointer (fine pointers only). Hotspot = centre of the lens. */
+@media (pointer: fine) {
+  html,
+  body {
+    cursor: url('./assets/cursor-magnifier-dark.svg') 15 15, auto;
+  }
+  a,
+  button,
+  summary,
+  select,
+  label,
+  [role='tab'],
+  [role='radio'],
+  [data-cursor],
+  input[type='checkbox'],
+  input[type='radio'] {
+    cursor: url('./assets/cursor-magnifier-gold.svg') 15 15, pointer;
+  }
+  input:not([type='checkbox']):not([type='radio']),
+  textarea {
+    cursor: text;
+  }
+  button:disabled {
+    cursor: url('./assets/cursor-magnifier-dark.svg') 15 15, not-allowed;
+  }
+}

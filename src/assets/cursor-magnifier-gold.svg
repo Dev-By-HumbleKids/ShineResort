@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
+  <defs>
+    <radialGradient id="g" cx="40%" cy="35%" r="70%">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".55"/>
+      <stop offset=".6" stop-color="#e6f1f4" stop-opacity=".25"/>
+      <stop offset="1" stop-color="#b9cfd6" stop-opacity=".35"/>
+    </radialGradient>
+    <linearGradient id="h" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4a4a4a"/>
+      <stop offset=".45" stop-color="#102C35"/>
+      <stop offset="1" stop-color="#000"/>
+    </linearGradient>
+  </defs>
+  <!-- light halo keeps it visible on dark sections -->
+  <circle cx="15" cy="15" r="12.6" fill="none" stroke="#fff" stroke-opacity=".8" stroke-width="1.6"/>
+  <line x1="24" y1="24" x2="36" y2="36" stroke="#fff" stroke-opacity=".8" stroke-width="8" stroke-linecap="round"/>
+  <!-- glass -->
+  <circle cx="15" cy="15" r="10.6" fill="url(#g)"/>
+  <path d="M9 12.5a7 7 0 0 1 5-5" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" opacity=".9"/>
+  <!-- rim -->
+  <circle cx="15" cy="15" r="11.2" fill="none" stroke="#C7A66A" stroke-width="2.6"/>
+  <circle cx="15" cy="15" r="9.9" fill="none" stroke="#d9dee0" stroke-width=".7"/>
+  <!-- ferrule -->
+  <line x1="22.6" y1="22.6" x2="25.4" y2="25.4" stroke="#c9ced1" stroke-width="3.4" stroke-linecap="butt"/>
+  <!-- handle -->
+  <line x1="26.2" y1="26.2" x2="35.6" y2="35.6" stroke="url(#h)" stroke-width="5.4" stroke-linecap="round"/>
+  <line x1="27.4" y1="26.6" x2="34" y2="33.2" stroke="#fff" stroke-opacity=".35" stroke-width="1" stroke-linecap="round"/>
+</svg>

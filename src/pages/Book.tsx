@@ -209,7 +209,7 @@ export default function Book() {
                       <p className="mt-2 text-sm text-muted">Optional extras. Experiences like island trips and horse riding can be added after booking from the Experiences page.</p>
                       <div className="mt-8 grid gap-3">
                         {roomExtras.map((x) => (
-                          <label key={x.id} className="flex cursor-pointer items-center justify-between gap-4 rounded-2xl border border-line p-5 transition hover:border-muted has-[:checked]:border-ink has-[:checked]:bg-card">
+                          <label key={x.id} className="flex items-center justify-between gap-4 rounded-2xl border border-line p-5 transition hover:border-muted has-[:checked]:border-ink has-[:checked]:bg-card">
                             <span className="flex items-center gap-3">
                               <input
                                 type="checkbox"
@@ -269,7 +269,7 @@ export default function Book() {
                           The Royal Beach Residence is confirmed by our reservations team, so this will be saved as a request awaiting review.
                         </p>
                       )}
-                      <label className="mt-6 flex cursor-pointer items-start gap-3 text-sm">
+                      <label className="mt-6 flex items-start gap-3 text-sm">
                         <input type="checkbox" checked={agree} onChange={(e) => { setAgree(e.target.checked); setAgreeErr(false) }} className="mt-1 size-4 accent-[var(--color-teal)]" aria-invalid={agreeErr} aria-describedby={agreeErr ? 'agree-err' : undefined} />
                         <span>I understand this is a demonstration: no real reservation is made and no payment is taken. I’ve read the example cancellation policy.</span>
                       </label>

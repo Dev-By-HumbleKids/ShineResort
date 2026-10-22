@@ -249,7 +249,7 @@ function SitePlan({ active, onHover }: { active: number | null; onHover: (i: num
               key={i}
               onMouseEnter={() => onHover(i)}
               onMouseLeave={() => onHover(null)}
-              className="cursor-pointer"
+              data-cursor=""
             >
               <circle cx={x} cy={y} r={active === i ? 14 : 11} fill={active === i ? 'var(--color-gold)' : 'var(--color-midnight)'} className="transition-all" />
               <text x={x} y={y + 4} textAnchor="middle" fontSize="11" fontWeight="700" fill={active === i ? '#102C35' : '#F7F4ED'}>

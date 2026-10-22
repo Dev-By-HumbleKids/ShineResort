@@ -67,7 +67,7 @@ export default function VillaScene({ room }: { room: Room }) {
   }
 
   return (
-    <div ref={host} className="relative h-full w-full cursor-grab overflow-hidden active:cursor-grabbing">
+    <div ref={host} className="relative h-full w-full overflow-hidden">
       {room.hotspots.map((h, i) => (
         <button
           key={h.id}

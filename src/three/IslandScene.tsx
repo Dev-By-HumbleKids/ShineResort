@@ -65,7 +65,7 @@ export default function IslandScene() {
   }
 
   return (
-    <div ref={host} className="relative h-full w-full cursor-grab overflow-hidden active:cursor-grabbing">
+    <div ref={host} className="relative h-full w-full overflow-hidden">
       {spots.map((s) => (
         <button
           key={s.id}
