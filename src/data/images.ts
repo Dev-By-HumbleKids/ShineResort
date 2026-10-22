@@ -113,6 +113,22 @@ const ids = {
   sailboat: '1540946485063-a40da27545f8',
   horsesPair: '1452378174528-3090a4bba7b2',
 
+  // menu sets
+  sTeaStand: '1578144738671-698aa1029e11',
+  sMontLoneYayPaw: '1730705511504-9997ee641c99',
+  sSanwinMakin: '1759922252179-428bb68f13e7',
+  sMontLinMaYar: '1758533223212-ca7055999068',
+  sMontPhatHtoke: '1590330813083-fc22d4b6a48c',
+  sNanGyiThoke: '1716959669847-4dad60ac301f',
+  sLaphetYay: '1541161284823-be8c6571a945',
+  sShweYinAye: '1761315631288-9d1f5e2e4430',
+  sSeafoodTower: '1785304968643-e73c3ad004d3',
+  sCanapes: '1774404016256-be0a54a44847',
+  sRoyalFeast: '1652021979353-2288f1835b65',
+  sKidsPlate: '1592940321917-a83616a936cc',
+  sGardenBowl: '1567575990843-105a1c70d76e',
+  sTasting: '1731941465921-eb4285693713',
+
   // menu photography
   mTeaLeafSalad: '1512621776951-a57141f2eefd',
   mRolls: '1579584425555-c3ce17fd4351',

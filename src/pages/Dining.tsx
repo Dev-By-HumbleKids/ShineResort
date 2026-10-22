@@ -1,18 +1,28 @@
 import { Clock } from 'lucide-react'
-import { useId, useState, type FormEvent } from 'react'
+import { useEffect, useId, useState, type FormEvent } from 'react'
 import { Confirmation } from '../components/booking/Confirmation'
 import { emptyGuest, GuestFields, validateGuest, type GuestErrors } from '../components/booking/GuestFields'
-import { MenuExplorer } from "../components/dining/MenuExplorer"
+import { MenuExplorer } from '../components/dining/MenuExplorer'
+import { MenuSets } from '../components/dining/MenuSets'
 import { PageHero } from '../components/layout/PageHero'
-import { DemoNotice, Field, SectionHeading, Stepper } from '../components/ui/bits'
+import { DemoNotice, Field, PriceSummary, SectionHeading, Stepper } from '../components/ui/bits'
 import { DateField } from '../components/ui/DateField'
 import { Img } from '../components/ui/Img'
 import { MaskReveal, Reveal } from '../components/ui/Reveal'
 import { venues } from '../data/dining'
+import { getSet, menuSets, type MenuSet } from '../data/sets'
 import { addDays, formatDate, today } from '../lib/dates'
+import { money, withFees } from '../lib/pricing'
+import { scrollToEl } from '../lib/scroll'
 import { saveReservation, type Guest, type Reservation } from '../lib/reservations'
 
 export default function Dining() {
+  // a set chosen from the showcase pre-fills the reservation form
+  const [picked, setPicked] = useState<{ id: string; n: number }>({ id: '', n: 0 })
+  const reserveSet = (id: string) => {
+    setPicked((p) => ({ id, n: p.n + 1 }))
+    setTimeout(() => scrollToEl(document.getElementById('reserve')), 60)
+  }
   return (
     <>
       <PageHero
@@ -22,8 +32,9 @@ export default function Dining() {
         intro="From mohinga at dawn to lobster by lantern-light — four venues, one philosophy: the morning’s catch, the region’s markets and Myanmar’s generous table."
       />
       <Venues />
+      <MenuSets onReserve={reserveSet} />
       <MenuExplorer />
-      <TableReservation />
+      <TableReservation picked={picked} />
     </>
   )
 }
@@ -55,11 +66,21 @@ function Venues() {
   )
 }
 
-const times = ['18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30']
+const dinnerTimes = ['18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30']
+/** Seating times that make sense for the chosen set. */
+function timesFor(set?: MenuSet) {
+  if (!set) return dinnerTimes
+  if (set.id === 'mont-tea') return ['14:30', '15:00', '15:30', '16:00', '16:30', '17:00']
+  if (set.id === 'mohinga-sunrise') return ['06:30', '07:00', '07:30', '08:00', '08:30', '09:00', '09:30', '10:00']
+  if (set.id === 'golden-hour') return ['17:00', '17:30', '18:00', '18:30']
+  if (set.served.startsWith('Lunch') || set.served === 'All day') return ['12:00', '12:30', '13:00', '13:30', ...dinnerTimes]
+  return dinnerTimes
+}
 const occasions = ['None', 'Birthday', 'Anniversary', 'Honeymoon', 'Proposal', 'Business']
 
-function TableReservation() {
+function TableReservation({ picked }: { picked: { id: string; n: number } }) {
   const id = useId()
+  const [setId, setSetId] = useState('')
   const [date, setDate] = useState(addDays(today(), 1))
   const [time, setTime] = useState('19:30')
   const [party, setParty] = useState(2)
@@ -68,6 +89,28 @@ function TableReservation() {
   const [guest, setGuest] = useState<Guest>(emptyGuest)
   const [errors, setErrors] = useState<GuestErrors & { date?: string }>({})
   const [done, setDone] = useState<Reservation | null>(null)
+  const set = getSet(setId)
+  const times = timesFor(set)
+  const setTotal = set ? (set.per === 'person' ? set.price * party : set.price) : 0
+
+  const applySet = (sid: string) => {
+    setSetId(sid)
+    const s = getSet(sid)
+    if (!s) {
+      setTime('19:30')
+      return
+    }
+    setVenue(s.venue)
+    setParty(s.party)
+    const slots = timesFor(s)
+    setTime(slots[Math.min(1, slots.length - 1)])
+  }
+  useEffect(() => {
+    if (!picked.n) return
+    setDone(null)
+    applySet(picked.id)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [picked.n])
 
   const submit = (e: FormEvent) => {
     e.preventDefault()
@@ -84,11 +127,12 @@ function TableReservation() {
       saveReservation({
         kind: 'dining',
         title: `Table at ${v.name}`,
-        summary: `${formatDate(date)} · ${time} · ${party} guest${party > 1 ? 's' : ''}${occasion !== 'None' ? ` · ${occasion}` : ''}`,
+        summary: `${formatDate(date)} · ${time} · ${party} guest${party > 1 ? 's' : ''}${set ? ` · ${set.name}` : ''}${occasion !== 'None' ? ` · ${occasion}` : ''}`,
         date,
         status: party > 8 || venue === 'pavilions' ? 'pending' : 'confirmed',
+        totals: set ? withFees([{ label: set.name, amount: setTotal, hint: set.per === 'person' ? `${money(set.price)} × ${party} guests` : set.serves }]) : undefined,
         guest,
-        meta: { venue, time, party, occasion },
+        meta: { venue, time, party, occasion, ...(set ? { set: set.id } : {}) },
       }),
     )
   }
@@ -110,6 +154,31 @@ function TableReservation() {
               <Confirmation r={done} onDone={() => setDone(null)} />
             ) : (
               <form onSubmit={submit} noValidate className="space-y-6" aria-label="Table reservation">
+                <Field id={`${id}-set`} label="Menu set (optional)">
+                  <select id={`${id}-set`} className="field" value={setId} onChange={(e) => applySet(e.target.value)}>
+                    <option value="">À la carte — no set</option>
+                    {menuSets.map((m) => (
+                      <option key={m.id} value={m.id}>
+                        {m.name} · {money(m.price)}/{m.per === 'person' ? 'guest' : 'set'}
+                      </option>
+                    ))}
+                  </select>
+                </Field>
+                {set && (
+                  <div className="flex items-center gap-4 rounded-2xl border border-gold/50 bg-gold/10 p-3">
+                    <span className="size-16 shrink-0 overflow-hidden rounded-xl">
+                      <Img name={set.image} alt="" width={200} sizes="64px" className="img-cover" />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      {set.my && <span className="font-myanmar block text-sm text-accent">{set.my}</span>}
+                      <span className="block font-serif text-xl leading-tight">{set.name}</span>
+                      <span className="text-xs text-muted">{set.served} · {set.serves}</span>
+                    </span>
+                    <button type="button" onClick={() => applySet('')} className="self-start text-xs text-muted underline hover:text-ink">
+                      Remove
+                    </button>
+                  </div>
+                )}
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Field id={`${id}-venue`} label="Venue">
                     <select id={`${id}-venue`} className="field" value={venue} onChange={(e) => setVenue(e.target.value)}>
@@ -150,6 +219,7 @@ function TableReservation() {
                   <Stepper label="Party size" hint="Up to 12 · 9+ by request" value={party} min={1} max={12} onChange={setParty} />
                 </div>
                 <GuestFields value={guest} onChange={setGuest} errors={errors} requestsLabel="Dietary needs or requests (optional)" />
+                {set && <PriceSummary totals={withFees([{ label: set.name, amount: setTotal, hint: set.per === 'person' ? `${money(set.price)} × ${party} guests` : set.serves }])} note="Set price shown for planning — settled at the restaurant. Demo only, no payment taken." />}
                 <button type="submit" className="btn btn-gold w-full">
                   {party > 8 || venue === 'pavilions' ? 'Send request' : 'Reserve table'}
                 </button>
