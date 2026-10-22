@@ -1,11 +1,17 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { ChevronDown, Search } from 'lucide-react'
-import { useEffect, useId, useRef, useState, type FormEvent } from 'react'
+import { CalendarDays, ChevronDown, Search } from 'lucide-react'
+import { useCallback, useEffect, useId, useRef, useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useStay } from '../../context/StayContext'
-import type { StayQuery } from '../../lib/availability'
-import { addDays, nightsBetween, today } from '../../lib/dates'
+import { rooms } from '../../data/rooms'
+import { nightlyPrice, type StayQuery } from '../../lib/availability'
+import { addDays, formatDate, nightsBetween, today } from '../../lib/dates'
 import { Stepper } from '../ui/bits'
+import { Calendar } from '../ui/Calendar'
+import { Popover } from '../ui/DateField'
+
+/** Lowest demo nightly rate across all rooms — shown under each calendar day. */
+const fromPrice = (iso: string) => Math.min(...rooms.map((r) => nightlyPrice(r, iso)))
 
 export const LIMITS = { adults: 12, children: 8, rooms: 5, maxNights: 30, horizonDays: 540 }
 
@@ -33,6 +39,9 @@ export function StaySearch({ variant = 'hero', onSearched }: Props) {
   const navigate = useNavigate()
   const id = useId()
   const popRef = useRef<HTMLDivElement>(null)
+  const formRef = useRef<HTMLFormElement>(null)
+  const [cal, setCal] = useState<null | 'start' | 'end'>(null)
+  const closeCal = useCallback(() => setCal(null), [])
 
   useEffect(() => setQ(query), [query])
 
@@ -78,6 +87,7 @@ export function StaySearch({ variant = 'hero', onSearched }: Props) {
 
   return (
     <form
+      ref={formRef}
       onSubmit={submit}
       noValidate
       aria-label="Search stay availability"
@@ -85,40 +95,58 @@ export function StaySearch({ variant = 'hero', onSearched }: Props) {
         hero ? 'border-pearl/20 bg-bg/92 backdrop-blur-xl' : 'border-line bg-card'
       }`}
     >
-      <div className="px-5 pb-3 pt-4">
-        <label htmlFor={`${id}-in`} className="field-label">
-          Check-in
-        </label>
-        <input
-          id={`${id}-in`}
-          type="date"
+      {(['start', 'end'] as const).map((k) => {
+        const v = k === 'start' ? q.checkIn : q.checkOut
+        const err = k === 'start' ? errors.checkIn : errors.checkOut
+        return (
+          <div key={k} className={`px-5 pb-3 pt-4 ${k === 'end' ? `border-t border-line ${cell}` : ''}`}>
+            <span id={`${id}-${k}-l`} className="field-label">
+              {k === 'start' ? 'Check-in' : 'Check-out'}
+              {k === 'end' && nights > 0 && <span className="normal-case tracking-normal text-accent"> · {nights} night{nights > 1 ? 's' : ''}</span>}
+            </span>
+            <button
+              type="button"
+              onClick={() => setCal((c) => (c === k ? null : k))}
+              aria-haspopup="dialog"
+              aria-expanded={cal === k}
+              aria-labelledby={`${id}-${k}-l ${id}-${k}-v`}
+              aria-invalid={!!err}
+              aria-describedby={err ? `${id}-${k}-err` : undefined}
+              className={`group flex w-full items-center justify-between gap-2 text-left font-serif text-xl transition ${cal === k ? 'text-accent' : ''}`}
+            >
+              <span id={`${id}-${k}-v`}>{v ? formatDate(v, { weekday: 'short', day: 'numeric', month: 'short' }) : 'Add date'}</span>
+              <CalendarDays className={`size-4 shrink-0 transition ${cal === k ? 'text-accent' : 'text-muted group-hover:text-ink'}`} aria-hidden />
+            </button>
+            {err && (
+              <p id={`${id}-${k}-err`} role="alert" className="field-error">
+                {err}
+              </p>
+            )}
+          </div>
+        )
+      })}
+      <Popover
+        open={!!cal}
+        onClose={closeCal}
+        anchor={formRef}
+        label="Choose your stay dates"
+        className={hero ? 'left-0 right-0 top-full mt-3 md:right-auto md:w-[46rem]' : 'left-0 right-0 top-full mt-2'}
+      >
+        <Calendar
+          key={cal ?? 'closed'}
+          mode="range"
+          start={q.checkIn}
+          end={q.checkOut}
+          picking={cal ?? 'start'}
           min={today()}
-          value={q.checkIn}
-          onChange={(e) => update({ checkIn: e.target.value })}
-          aria-invalid={!!errors.checkIn}
-          aria-describedby={errors.checkIn ? `${id}-in-err` : undefined}
-          className="w-full bg-transparent font-serif text-xl outline-none"
-          required
+          max={addDays(today(), LIMITS.horizonDays)}
+          maxNights={LIMITS.maxNights}
+          months={hero ? 2 : 1}
+          priceFor={fromPrice}
+          onChange={(checkIn, checkOut) => update({ checkIn, checkOut })}
+          onDone={closeCal}
         />
-        {errors.checkIn && <p id={`${id}-in-err`} role="alert" className="field-error">{errors.checkIn}</p>}
-      </div>
-      <div className={`border-t border-line px-5 pb-3 pt-4 ${cell}`}>
-        <label htmlFor={`${id}-out`} className="field-label">
-          Check-out {nights > 0 && <span className="normal-case tracking-normal text-accent">· {nights} night{nights > 1 ? 's' : ''}</span>}
-        </label>
-        <input
-          id={`${id}-out`}
-          type="date"
-          min={q.checkIn ? addDays(q.checkIn, 1) : today()}
-          value={q.checkOut}
-          onChange={(e) => update({ checkOut: e.target.value })}
-          aria-invalid={!!errors.checkOut}
-          aria-describedby={errors.checkOut ? `${id}-out-err` : undefined}
-          className="w-full bg-transparent font-serif text-xl outline-none"
-          required
-        />
-        {errors.checkOut && <p id={`${id}-out-err`} role="alert" className="field-error">{errors.checkOut}</p>}
-      </div>
+      </Popover>
       <div ref={popRef} className={`relative border-t border-line px-5 pb-3 pt-4 ${cell}`}>
         <span id={`${id}-g`} className="field-label">
           Guests & rooms

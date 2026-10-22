@@ -5,6 +5,7 @@ import { addDays, formatDate, today } from '../../lib/dates'
 import { experienceLines, money, withFees } from '../../lib/pricing'
 import { saveReservation, type Guest, type Reservation } from '../../lib/reservations'
 import { DemoNotice, Field, PriceSummary, Stepper } from '../ui/bits'
+import { DateField } from '../ui/DateField'
 import { Confirmation } from './Confirmation'
 import { emptyGuest, GuestFields, validateGuest, type GuestErrors } from './GuestFields'
 
@@ -78,16 +79,14 @@ export function ExperienceForm({ exp, onDone }: { exp: Experience; onDone: () =>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Field id={`${id}-date`} label="Preferred date" error={errors.date}>
-          <input
+          <DateField
             id={`${id}-date`}
-            type="date"
-            className="field"
             min={addDays(today(), 1)}
             max={addDays(today(), 365)}
             value={date}
-            onChange={(e) => setDate(e.target.value)}
-            aria-invalid={!!errors.date}
-            aria-describedby={errors.date ? `${id}-date-error` : undefined}
+            onChange={setDate}
+            invalid={!!errors.date}
+            describedBy={errors.date ? `${id}-date-error` : undefined}
           />
         </Field>
         <Field id={`${id}-time`} label="Preferred time">

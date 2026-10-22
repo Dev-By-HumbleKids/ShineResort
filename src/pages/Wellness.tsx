@@ -5,6 +5,7 @@ import { Confirmation } from '../components/booking/Confirmation'
 import { emptyGuest, GuestFields, validateGuest, type GuestErrors } from '../components/booking/GuestFields'
 import { PageHero } from '../components/layout/PageHero'
 import { DemoNotice, Field, PriceSummary, SectionHeading } from '../components/ui/bits'
+import { DateField } from '../components/ui/DateField'
 import { Img } from '../components/ui/Img'
 import { MaskReveal, Reveal } from '../components/ui/Reveal'
 import { spaTimes, treatments } from '../data/spa'
@@ -175,7 +176,7 @@ function SpaForm({ selected, onSelect }: { selected: string; onSelect: (id: stri
           </select>
         </Field>
         <Field id={`${id}-d`} label="Date" error={errors.date}>
-          <input id={`${id}-d`} type="date" className="field" min={today()} value={date} onChange={(e) => setDate(e.target.value)} aria-invalid={!!errors.date} aria-describedby={errors.date ? `${id}-d-error` : undefined} />
+          <DateField id={`${id}-d`} min={today()} max={addDays(today(), 180)} value={date} onChange={setDate} invalid={!!errors.date} describedBy={errors.date ? `${id}-d-error` : undefined} />
         </Field>
         <Field id={`${id}-time`} label="Time">
           <select id={`${id}-time`} className="field" value={time} onChange={(e) => setTime(e.target.value)}>

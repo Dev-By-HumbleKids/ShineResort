@@ -6,6 +6,7 @@ import { Confirmation } from '../components/booking/Confirmation'
 import { emptyGuest, GuestFields, validateGuest, type GuestErrors } from '../components/booking/GuestFields'
 import { PageHero } from '../components/layout/PageHero'
 import { DemoNotice, Field, SectionHeading, Stepper } from '../components/ui/bits'
+import { DateField } from '../components/ui/DateField'
 import { Img } from '../components/ui/Img'
 import { MaskReveal, Reveal } from '../components/ui/Reveal'
 import { diningImages, menu, menuCategories, venues } from '../data/dining'
@@ -235,15 +236,14 @@ function TableReservation() {
                     </select>
                   </Field>
                   <Field id={`${id}-date`} label="Date" error={errors.date}>
-                    <input
+                    <DateField
                       id={`${id}-date`}
-                      type="date"
-                      className="field"
                       min={today()}
+                      max={addDays(today(), 180)}
                       value={date}
-                      onChange={(e) => setDate(e.target.value)}
-                      aria-invalid={!!errors.date}
-                      aria-describedby={errors.date ? `${id}-date-error` : undefined}
+                      onChange={setDate}
+                      invalid={!!errors.date}
+                      describedBy={errors.date ? `${id}-date-error` : undefined}
                     />
                   </Field>
                   <Field id={`${id}-time`} label="Time">
