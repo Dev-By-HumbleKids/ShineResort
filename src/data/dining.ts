@@ -51,41 +51,41 @@ export const menuCategories: MenuCategory[] = [
 
 /** Fictional demonstration menu. Prices in USD. */
 export const menu: MenuItem[] = [
-  { category: 'Starters', name: 'Tea-Leaf Salad, Reimagined', description: 'Fermented laphet, crisp beans, toasted sesame, heirloom tomato, lime.', price: 16, tags: ['VG', 'Signature'] },
-  { category: 'Starters', name: 'Tuna Crudo', description: 'Line-caught tuna, green mango, chilli oil, puffed rice.', price: 22, tags: ['GF'] },
-  { category: 'Starters', name: 'Pomelo & Prawn', description: 'Charred prawns, pomelo, mint, roasted peanut dressing.', price: 19, tags: ['GF'] },
-  { category: 'Starters', name: 'Garden Rolls', description: 'Rice paper, herbs from our garden, tamarind dip.', price: 14, tags: ['VG'] },
+  { category: 'Starters', name: 'Tea-Leaf Salad, Reimagined', image: 'mTeaLeafSalad', description: 'Fermented laphet, crisp beans, toasted sesame, heirloom tomato, lime.', price: 16, tags: ['VG', 'Signature'], pairing: 'Thanaka Cooler', story: 'Laphet is Myanmar’s beloved fermented tea leaf. We dress it at the table so the beans stay crunchy.' },
+  { category: 'Starters', name: 'Tuna Crudo', image: 'mCrudo', description: 'Line-caught tuna, green mango, chilli oil, puffed rice.', price: 22, tags: ['GF'], pairing: 'Silver Shore', story: 'Cut minutes before serving from fish landed at the village jetty that morning.' },
+  { category: 'Starters', name: 'Pomelo & Prawn', image: 'mPomeloPrawn', description: 'Charred prawns, pomelo, mint, roasted peanut dressing.', price: 19, tags: ['GF'], pairing: 'Bay of Bengal Spritz' },
+  { category: 'Starters', name: 'Garden Rolls', image: 'mRolls', description: 'Rice paper, herbs from our garden, tamarind dip.', price: 14, tags: ['VG'], pairing: 'Hibiscus Iced Tea' },
 
-  { category: 'Seafood', name: 'Ngwe Saung Lobster', description: 'Half lobster, smoked butter, lemongrass, sea herbs.', price: 68, tags: ['GF', 'Signature'] },
-  { category: 'Seafood', name: 'Salt-Baked Sea Bass', description: 'Whole fish baked in sea salt and banana leaf, carved tableside.', price: 54, tags: ['GF'] },
-  { category: 'Seafood', name: 'Tiger Prawns on Coals', description: 'Garlic, chilli and turmeric glaze, grilled lime.', price: 42, tags: ['Spicy'] },
-  { category: 'Seafood', name: 'Crab Curry', description: 'Mud crab, coconut, curry leaf, steamed jasmine rice.', price: 46, tags: ['Spicy'] },
+  { category: 'Seafood', name: 'Ngwe Saung Lobster', image: 'mLobster', description: 'Half lobster, smoked butter, lemongrass, sea herbs.', price: 68, tags: ['GF', 'Signature'], pairing: 'A glass of Chablis', story: 'Our most requested dish — finished over coconut-husk embers for a gentle smokiness.' },
+  { category: 'Seafood', name: 'Salt-Baked Sea Bass', image: 'mSeaBass', description: 'Whole fish baked in sea salt and banana leaf, carved tableside.', price: 54, tags: ['GF'], pairing: 'Bay of Bengal Spritz', story: 'The salt crust is cracked open at your table, releasing the aroma of banana leaf and lime.' },
+  { category: 'Seafood', name: 'Tiger Prawns on Coals', image: 'mTigerPrawns', description: 'Garlic, chilli and turmeric glaze, grilled lime.', price: 42, tags: ['Spicy'], pairing: 'Golden Hour' },
+  { category: 'Seafood', name: 'Crab Curry', image: 'mCrabCurry', description: 'Mud crab, coconut, curry leaf, steamed jasmine rice.', price: 46, tags: ['Spicy'], pairing: 'Lemongrass Lime Soda' },
 
-  { category: 'Signature Mains', name: 'Wagyu Striploin', description: 'Smoked over coconut husk, shallot jam, pepper jus.', price: 72 },
-  { category: 'Signature Mains', name: 'Duck & Tamarind', description: 'Slow-roasted duck breast, tamarind glaze, sticky rice cake.', price: 44 },
-  { category: 'Signature Mains', name: 'Jackfruit Rendang', description: 'Young jackfruit, coconut, kaffir lime, roti.', price: 28, tags: ['VG'] },
+  { category: 'Signature Mains', name: 'Wagyu Striploin', image: 'mWagyu', description: 'Smoked over coconut husk, shallot jam, pepper jus.', price: 72, pairing: 'Lantern Old Fashioned' },
+  { category: 'Signature Mains', name: 'Duck & Tamarind', image: 'mDuck', description: 'Slow-roasted duck breast, tamarind glaze, sticky rice cake.', price: 44, pairing: 'A glass of Pinot Noir' },
+  { category: 'Signature Mains', name: 'Jackfruit Rendang', image: 'mRendang', description: 'Young jackfruit, coconut, kaffir lime, roti.', price: 28, tags: ['VG'], pairing: 'Hibiscus Iced Tea' },
 
-  { category: 'Myanmar-Inspired', name: 'Mohinga at Dawn', description: 'The nation’s breakfast: fish broth, rice noodles, banana stem, crisp fritters.', price: 18, tags: ['Signature'] },
-  { category: 'Myanmar-Inspired', name: 'Ayeyarwady Fish Curry', description: 'River fish, tomato, turmeric, fried shallot, balachaung.', price: 32, tags: ['Spicy', 'GF'] },
-  { category: 'Myanmar-Inspired', name: 'Shan Noodles', description: 'Sticky rice noodles, tomato-chicken sauce, pickled mustard greens.', price: 22 },
-  { category: 'Myanmar-Inspired', name: 'Pathein Halawa Plate', description: 'Our version of the regional sweet, with coconut cream.', price: 12, tags: ['V'] },
+  { category: 'Myanmar-Inspired', name: 'Mohinga at Dawn', image: 'mMohinga', description: 'The nation’s breakfast: fish broth, rice noodles, banana stem, crisp fritters.', price: 18, tags: ['Signature'], pairing: 'Myanmar hill tea', story: 'Daw Khin Shwe’s 1968 recipe, served every morning at Tidewater from 06:30.' },
+  { category: 'Myanmar-Inspired', name: 'Ayeyarwady Fish Curry', image: 'mFishCurry', description: 'River fish, tomato, turmeric, fried shallot, balachaung.', price: 32, tags: ['Spicy', 'GF'], pairing: 'Lemongrass Lime Soda' },
+  { category: 'Myanmar-Inspired', name: 'Shan Noodles', image: 'mShanNoodles', description: 'Sticky rice noodles, tomato-chicken sauce, pickled mustard greens.', price: 22, pairing: 'Thanaka Cooler' },
+  { category: 'Myanmar-Inspired', name: 'Pathein Halawa Plate', image: 'mHalawa', description: 'Our version of the regional sweet, with coconut cream.', price: 12, tags: ['V'], pairing: 'Myanmar hill tea', story: 'A nod to nearby Pathein, famous for its rich, buttery halawa.' },
 
-  { category: 'International', name: 'Lobster Linguine', description: 'Bisque, cherry tomato, basil, chilli.', price: 48 },
-  { category: 'International', name: 'Wood-Fired Margherita', description: 'San Marzano tomato, buffalo mozzarella, basil.', price: 24, tags: ['V'] },
-  { category: 'International', name: 'Grilled Salmon', description: 'Herb crust, crushed potatoes, beurre blanc.', price: 38, tags: ['GF'] },
+  { category: 'International', name: 'Lobster Linguine', image: 'mLinguine', description: 'Bisque, cherry tomato, basil, chilli.', price: 48, pairing: 'A glass of Vermentino' },
+  { category: 'International', name: 'Wood-Fired Margherita', image: 'mPizza', description: 'San Marzano tomato, buffalo mozzarella, basil.', price: 24, tags: ['V'], pairing: 'Bay of Bengal Spritz' },
+  { category: 'International', name: 'Grilled Salmon', image: 'mSalmon', description: 'Herb crust, crushed potatoes, beurre blanc.', price: 38, tags: ['GF'], pairing: 'A glass of Sauvignon Blanc' },
 
-  { category: 'Desserts', name: 'Coconut & Palm Sugar Parfait', description: 'Toasted coconut, palm sugar caramel, lime.', price: 14, tags: ['V', 'Signature'] },
-  { category: 'Desserts', name: 'Dark Chocolate Sphere', description: 'Single-origin chocolate, passion fruit, warm sauce poured at the table.', price: 16, tags: ['V'] },
-  { category: 'Desserts', name: 'Tropical Fruit Plate', description: 'The morning’s best from the market.', price: 11, tags: ['VG', 'GF'] },
+  { category: 'Desserts', name: 'Coconut & Palm Sugar Parfait', image: 'mParfait', description: 'Toasted coconut, palm sugar caramel, lime.', price: 14, tags: ['V', 'Signature'], pairing: 'Golden Hour', story: 'Palm sugar from Ayeyarwady toddy palms, caramelised slowly for a smoky sweetness.' },
+  { category: 'Desserts', name: 'Dark Chocolate Sphere', image: 'mChocolate', description: 'Single-origin chocolate, passion fruit, warm sauce poured at the table.', price: 16, tags: ['V'], pairing: 'Lantern Old Fashioned' },
+  { category: 'Desserts', name: 'Tropical Fruit Plate', image: 'mFruit', description: 'The morning’s best from the market.', price: 11, tags: ['VG', 'GF'], pairing: 'Lemongrass Lime Soda' },
 
-  { category: 'Cocktails', name: 'Silver Shore', description: 'Gin, lemongrass, cucumber, tonic, edible silver.', price: 18, tags: ['Signature'] },
-  { category: 'Cocktails', name: 'Golden Hour', description: 'Aged rum, palm sugar, passion fruit, smoked salt.', price: 19 },
-  { category: 'Cocktails', name: 'Bay of Bengal Spritz', description: 'Aperitivo, pomelo, sparkling wine.', price: 17 },
-  { category: 'Cocktails', name: 'Lantern Old Fashioned', description: 'Bourbon, jaggery, cacao bitters.', price: 20 },
+  { category: 'Cocktails', name: 'Silver Shore', image: 'mSilverShore', description: 'Gin, lemongrass, cucumber, tonic, edible silver.', price: 18, tags: ['Signature'], pairing: 'Tuna Crudo', story: 'Our house signature — named for the silver sand that gives Ngwe Saung its name.' },
+  { category: 'Cocktails', name: 'Golden Hour', image: 'mGoldenHour', description: 'Aged rum, palm sugar, passion fruit, smoked salt.', price: 19, pairing: 'Tiger Prawns on Coals' },
+  { category: 'Cocktails', name: 'Bay of Bengal Spritz', image: 'mSpritz', description: 'Aperitivo, pomelo, sparkling wine.', price: 17, pairing: 'Pomelo & Prawn' },
+  { category: 'Cocktails', name: 'Lantern Old Fashioned', image: 'mOldFashioned', description: 'Bourbon, jaggery, cacao bitters.', price: 20, pairing: 'Dark Chocolate Sphere' },
 
-  { category: 'Zero-Proof', name: 'Thanaka Cooler', description: 'Cucumber, lime, mint, sparkling water.', price: 9, tags: ['VG'] },
-  { category: 'Zero-Proof', name: 'Young Coconut', description: 'Served in the shell, straight from the palm.', price: 7, tags: ['VG'] },
-  { category: 'Zero-Proof', name: 'Hibiscus Iced Tea', description: 'Roselle, ginger, honey.', price: 8 },
+  { category: 'Zero-Proof', name: 'Thanaka Cooler', image: 'mCooler', description: 'Cucumber, lime, mint, sparkling water.', price: 9, tags: ['VG'], pairing: 'Tea-Leaf Salad, Reimagined' },
+  { category: 'Zero-Proof', name: 'Lemongrass Lime Soda', image: 'mLimeSoda', description: 'Fresh lemongrass, lime, palm-sugar syrup, soda.', price: 8, tags: ['VG'], pairing: 'Crab Curry' },
+  { category: 'Zero-Proof', name: 'Hibiscus Iced Tea', image: 'mHibiscus', description: 'Roselle, ginger, honey.', price: 8, pairing: 'Garden Rolls' },
 ]
 
 export const diningImages: ImageKey[] = ['chefPlating', 'freshSeafood', 'salmon', 'saladBowl', 'noodleBowl', 'steak', 'dishPlatter']

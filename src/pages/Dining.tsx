@@ -1,18 +1,15 @@
-import { AnimatePresence, motion } from 'framer-motion'
-import { Clock, Leaf, Wheat } from 'lucide-react'
-import { useId, useMemo, useState, type FormEvent } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { Clock } from 'lucide-react'
+import { useId, useState, type FormEvent } from 'react'
 import { Confirmation } from '../components/booking/Confirmation'
 import { emptyGuest, GuestFields, validateGuest, type GuestErrors } from '../components/booking/GuestFields'
+import { MenuExplorer } from "../components/dining/MenuExplorer"
 import { PageHero } from '../components/layout/PageHero'
 import { DemoNotice, Field, SectionHeading, Stepper } from '../components/ui/bits'
 import { DateField } from '../components/ui/DateField'
 import { Img } from '../components/ui/Img'
 import { MaskReveal, Reveal } from '../components/ui/Reveal'
-import { diningImages, menu, menuCategories, venues } from '../data/dining'
-import type { MenuCategory } from '../data/types'
+import { venues } from '../data/dining'
 import { addDays, formatDate, today } from '../lib/dates'
-import { money } from '../lib/pricing'
 import { saveReservation, type Guest, type Reservation } from '../lib/reservations'
 
 export default function Dining() {
@@ -53,111 +50,6 @@ function Venues() {
             </Reveal>
           </article>
         ))}
-      </div>
-    </section>
-  )
-}
-
-type Diet = 'all' | 'V' | 'VG' | 'GF'
-
-function MenuExplorer() {
-  const [params, setParams] = useSearchParams()
-  const initial = params.get('menu') as MenuCategory | null
-  const [cat, setCat] = useState<MenuCategory>(initial && menuCategories.includes(initial) ? initial : 'Starters')
-  const [diet, setDiet] = useState<Diet>('all')
-  const items = useMemo(
-    () => menu.filter((m) => m.category === cat && (diet === 'all' || m.tags?.includes(diet) || (diet === 'V' && m.tags?.includes('VG')))),
-    [cat, diet],
-  )
-  const select = (c: MenuCategory) => {
-    setCat(c)
-    setParams({ menu: c }, { replace: true, preventScrollReset: true })
-  }
-
-  return (
-    <section id="menu" className="scroll-mt-20 bg-midnight py-24 text-pearl md:py-32" aria-labelledby="menu-h">
-      <div className="container-x">
-        <div className="grid gap-12 lg:grid-cols-12">
-          <div className="lg:col-span-4">
-            <div id="menu-h">
-              <SectionHeading light eyebrow="Tidewater · sample menu" title={<>Taste the <em className="text-gold">coast.</em></>} />
-            </div>
-            <div className="mt-10 hidden grid-cols-3 gap-2 lg:grid">
-              {diningImages.slice(0, 6).map((im) => (
-                <div key={im} className="aspect-square overflow-hidden rounded-xl">
-                  <Img name={im} alt="" sizes="120px" width={300} className="img-cover transition duration-700 hover:scale-110" />
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="min-w-0 lg:col-span-8">
-            <div role="tablist" aria-label="Menu sections" className="scrollbar-none -mx-5 flex gap-1 overflow-x-auto px-5 md:mx-0 md:flex-wrap md:px-0">
-              {menuCategories.map((c) => (
-                <button
-                  key={c}
-                  role="tab"
-                  aria-selected={c === cat}
-                  aria-controls="menu-panel"
-                  onClick={() => select(c)}
-                  className={`relative shrink-0 rounded-full px-4 py-2.5 text-sm transition ${c === cat ? 'text-midnight' : 'text-pearl/70 hover:text-pearl'}`}
-                >
-                  {c === cat && <motion.span layoutId="menu-pill" className="absolute inset-0 rounded-full bg-gold" transition={{ type: 'spring', stiffness: 300, damping: 30 }} />}
-                  <span className="relative">{c}</span>
-                </button>
-              ))}
-            </div>
-            <div className="mt-5 flex flex-wrap items-center gap-2 text-xs" role="group" aria-label="Dietary filter">
-              <span className="text-pearl/60">Dietary:</span>
-              {(
-                [
-                  ['all', 'Everything'],
-                  ['V', 'Vegetarian'],
-                  ['VG', 'Vegan'],
-                  ['GF', 'Gluten-free'],
-                ] as [Diet, string][]
-              ).map(([d, l]) => (
-                <button
-                  key={d}
-                  aria-pressed={diet === d}
-                  onClick={() => setDiet(d)}
-                  className={`rounded-full border px-3 py-1.5 transition ${diet === d ? 'border-gold text-gold' : 'border-pearl/20 text-pearl/70 hover:border-pearl/50'}`}
-                >
-                  {l}
-                </button>
-              ))}
-            </div>
-
-            <div id="menu-panel" role="tabpanel" aria-label={cat} className="mt-8 min-h-[22rem]">
-              <AnimatePresence mode="wait">
-                <motion.ul key={cat + diet} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.35 }} className="divide-y divide-pearl/10">
-                  {items.length === 0 && <li className="py-10 text-pearl/60">No dishes in this section match that dietary filter.</li>}
-                  {items.map((m) => (
-                    <li key={m.name} className="flex items-baseline justify-between gap-6 py-5">
-                      <div>
-                        <p className="flex flex-wrap items-center gap-2 font-serif text-2xl">
-                          {m.name}
-                          {m.tags?.includes('Signature') && <span className="rounded-full border border-gold/60 px-2 py-0.5 font-sans text-[0.6rem] uppercase tracking-[0.15em] text-gold">Signature</span>}
-                        </p>
-                        <p className="mt-1 text-sm text-pearl/65">{m.description}</p>
-                        <p className="mt-2 flex gap-3 text-[0.68rem] uppercase tracking-[0.12em] text-pearl/55">
-                          {m.tags?.includes('VG') ? (
-                            <span className="flex items-center gap-1"><Leaf className="size-3" aria-hidden />Vegan</span>
-                          ) : m.tags?.includes('V') ? (
-                            <span className="flex items-center gap-1"><Leaf className="size-3" aria-hidden />Vegetarian</span>
-                          ) : null}
-                          {m.tags?.includes('GF') && <span className="flex items-center gap-1"><Wheat className="size-3" aria-hidden />Gluten-free</span>}
-                          {m.tags?.includes('Spicy') && <span>🌶 Spicy</span>}
-                        </p>
-                      </div>
-                      <p className="shrink-0 font-serif text-2xl tabular-nums text-gold">{money(m.price)}</p>
-                    </li>
-                  ))}
-                </motion.ul>
-              </AnimatePresence>
-            </div>
-            <p className="mt-6 text-xs text-pearl/50">Fictional demonstration menu. Prices in USD; dishes are illustrative and not served at a real restaurant.</p>
-          </div>
-        </div>
       </div>
     </section>
   )

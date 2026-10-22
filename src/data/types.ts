@@ -74,7 +74,12 @@ export type MenuItem = {
   description: string
   price: number
   category: MenuCategory
+  image: ImageKey
   tags?: ('V' | 'VG' | 'GF' | 'Spicy' | 'Signature')[]
+  /** suggested drink or dish pairing */
+  pairing?: string
+  /** chef's note shown in the quick view */
+  story?: string
 }
 
 export type Treatment = {
