@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowUpRight, Camera, Check, CheckCircle2, Clock, CloudSun, Compass, Heart, ShieldCheck, Star, Sun, Users, UtensilsCrossed, Waves } from 'lucide-react'
+import { ArrowUp, ArrowUpRight, Camera, Check, CheckCircle2, Clock, CloudSun, Compass, Heart, ShieldCheck, Star, Sun, Users, UtensilsCrossed, Waves } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { ExperienceForm } from '../components/booking/ExperienceForm'
@@ -43,12 +43,51 @@ export default function Experiences() {
   }
   useEffect(() => setPicked({ id: '', n: 0 }), [open?.id])
 
+  // "Explore first": once the guest is down at the booking form (often after a
+  // direct "Book" jump), offer a quick way back up to the experience details.
+  const [atBooking, setAtBooking] = useState(false)
+  const [jumped, setJumped] = useState(false)
+  useEffect(() => {
+    setAtBooking(false)
+    setJumped(false)
+    if (!open) return
+    let el: HTMLElement | null = null
+    let raf = 0
+    const check = () => {
+      if (!el || !bookRef.current) return
+      const top = bookRef.current.getBoundingClientRect().top - el.getBoundingClientRect().top
+      setAtBooking(top < el.clientHeight * 0.55)
+    }
+    const onScroll = () => {
+      cancelAnimationFrame(raf)
+      raf = requestAnimationFrame(check)
+    }
+    // the dialog mounts a tick later; find its scroll container then
+    const t = setTimeout(() => {
+      el = bookRef.current?.closest<HTMLElement>('.overflow-y-auto') ?? null
+      el?.addEventListener('scroll', onScroll, { passive: true })
+      check()
+    }, 120)
+    return () => {
+      clearTimeout(t)
+      cancelAnimationFrame(raf)
+      el?.removeEventListener('scroll', onScroll)
+    }
+  }, [open?.id])
+
+  const exploreFirst = () => {
+    const el = bookRef.current?.closest<HTMLElement>('.overflow-y-auto')
+    el?.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })
+    setJumped(false)
+  }
+
   useEffect(() => {
     document.title = open ? `${open.title} — SHINE` : 'Experiences — SHINE'
   }, [open])
 
   useEffect(() => {
     if (open && params.get('book') === '1') {
+      setJumped(true)
       const t = setTimeout(() => bookRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 650)
       return () => clearTimeout(t)
     }
@@ -269,8 +308,53 @@ export default function Experiences() {
             <p className="text-xs text-muted">Departure times: {open.times.join(' · ')}</p>
 
             <div ref={bookRef} className="scroll-mt-4 border-t border-line pt-10">
+              {journey && (
+                <button
+                  type="button"
+                  onClick={exploreFirst}
+                  className="group mb-8 flex w-full items-center gap-4 rounded-2xl border border-dashed border-gold/60 bg-gold/5 p-3 text-left transition hover:border-gold hover:bg-gold/10"
+                >
+                  <span className="flex shrink-0 -space-x-3" aria-hidden>
+                    {journey.steps.slice(0, 3).map((st) => (
+                      <span key={st.title} className="size-11 overflow-hidden rounded-full ring-2 ring-bg">
+                        <Img name={st.image} alt="" width={120} sizes="44px" className="img-cover" />
+                      </span>
+                    ))}
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-sm font-semibold">New to this experience?</span>
+                    <span className="block text-xs text-muted">See the highlights, your day step by step and every package before you book.</span>
+                  </span>
+                  <span className="flex shrink-0 items-center gap-1.5 rounded-full bg-ink px-3.5 py-2 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-bg transition group-hover:bg-accent">
+                    <ArrowUp className="size-3.5 transition group-hover:-translate-y-0.5" aria-hidden /> Explore first
+                  </span>
+                </button>
+              )}
               <h3 className="mb-6 text-4xl">Reserve this experience</h3>
               <ExperienceForm key={open.id} exp={open} onDone={close} packageId={picked} />
+            </div>
+
+            {/* floating shortcut back to the details while filling in the form */}
+            <div className="pointer-events-none sticky bottom-3 z-20 flex justify-center">
+              <AnimatePresence>
+                {atBooking && journey && (
+                  <motion.button
+                    type="button"
+                    onClick={exploreFirst}
+                    initial={{ opacity: 0, y: 16, scale: 0.9 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 16, scale: 0.9 }}
+                    transition={{ type: 'spring', stiffness: 320, damping: 26 }}
+                    className="pointer-events-auto relative flex items-center gap-2 rounded-full bg-midnight px-5 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-pearl shadow-[0_18px_40px_-12px_rgb(16_44_53/0.6)] ring-1 ring-gold/50 transition hover:bg-teal"
+                    aria-label="Explore the experience details first"
+                  >
+                    {jumped && <span aria-hidden className="absolute inset-0 animate-ping rounded-full ring-2 ring-gold/60 [animation-duration:2s]" />}
+                    <Compass className="size-4 text-gold" aria-hidden />
+                    Explore first
+                    <ArrowUp className="size-3.5" aria-hidden />
+                  </motion.button>
+                )}
+              </AnimatePresence>
             </div>
           </div>
         )}
