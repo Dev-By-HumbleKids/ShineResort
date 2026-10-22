@@ -1,13 +1,14 @@
-import { Clock, Dumbbell, Flower2, Heart, Sunrise, Users } from 'lucide-react'
+import { Dumbbell, Flower2, Heart, Sunrise } from 'lucide-react'
 import { useId, useRef, useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { Confirmation } from '../components/booking/Confirmation'
 import { emptyGuest, GuestFields, validateGuest, type GuestErrors } from '../components/booking/GuestFields'
+import { Treatments } from '../components/wellness/Treatments'
 import { PageHero } from '../components/layout/PageHero'
 import { DemoNotice, Field, PriceSummary, SectionHeading } from '../components/ui/bits'
 import { DateField } from '../components/ui/DateField'
 import { Img } from '../components/ui/Img'
-import { MaskReveal, Reveal } from '../components/ui/Reveal'
+import { MaskReveal } from '../components/ui/Reveal'
 import { spaTimes, treatments } from '../data/spa'
 import { addDays, formatDate, today } from '../lib/dates'
 import { money, withFees } from '../lib/pricing'
@@ -63,30 +64,7 @@ export default function Wellness() {
         </div>
       </section>
 
-      <section className="container-x py-24 md:py-32" aria-labelledby="tr-h">
-        <div id="tr-h">
-          <SectionHeading eyebrow="Treatment menu" title={<>Choose your <em className="text-accent">journey.</em></>} />
-        </div>
-        <div className="mt-14 grid gap-px overflow-hidden rounded-[2rem] border border-line bg-line md:grid-cols-2">
-          {treatments.map((t, i) => (
-            <Reveal key={t.id} delay={(i % 2) * 0.06} className="flex h-full flex-col bg-bg p-7 md:p-10">
-              <p className="eyebrow text-accent">{t.kind}</p>
-              <h3 className="mt-3 text-4xl">{t.name}</h3>
-              <p className="mt-3 flex-1 leading-relaxed text-muted">{t.description}</p>
-              <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
-                <p className="flex items-center gap-4 text-sm">
-                  <span className="flex items-center gap-1.5"><Clock className="size-4 text-accent" aria-hidden />{t.duration >= 240 ? '3 days' : `${t.duration} min`}</span>
-                  {t.forTwo && <span className="flex items-center gap-1.5"><Users className="size-4 text-accent" aria-hidden />For two</span>}
-                  <span className="font-serif text-2xl">{money(t.price)}</span>
-                </p>
-                <button onClick={() => choose(t.id)} className="btn btn-ghost min-h-11" aria-label={`Book ${t.name}`}>
-                  Book treatment
-                </button>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </section>
+      <Treatments onBook={choose} />
 
       <section className="bg-bg-alt py-24 md:py-32">
         <div className="container-x grid gap-14 lg:grid-cols-12">

@@ -1,5 +1,5 @@
 import { CloudSun, ShieldAlert } from 'lucide-react'
-import { useId, useMemo, useState, type FormEvent } from 'react'
+import { useEffect, useId, useMemo, useState, type FormEvent } from 'react'
 import type { Experience } from '../../data/types'
 import { addDays, formatDate, today } from '../../lib/dates'
 import { experienceLines, money, withFees } from '../../lib/pricing'
@@ -10,7 +10,7 @@ import { Confirmation } from './Confirmation'
 import { emptyGuest, GuestFields, validateGuest, type GuestErrors } from './GuestFields'
 
 /** Configure & reserve an experience with live, itemised pricing. */
-export function ExperienceForm({ exp, onDone }: { exp: Experience; onDone: () => void }) {
+export function ExperienceForm({ exp, onDone, packageId }: { exp: Experience; onDone: () => void; packageId?: { id: string; n: number } }) {
   const id = useId()
   const [pkgId, setPkgId] = useState(exp.packages[0].id)
   const [date, setDate] = useState(addDays(today(), 3))
@@ -21,6 +21,11 @@ export function ExperienceForm({ exp, onDone }: { exp: Experience; onDone: () =>
   const [errors, setErrors] = useState<GuestErrors & { date?: string; ack?: string }>({})
   const [ack, setAck] = useState(false)
   const [done, setDone] = useState<Reservation | null>(null)
+
+  // a package picked from the showcase above pre-selects it here
+  useEffect(() => {
+    if (packageId?.id) setPkgId(packageId.id)
+  }, [packageId])
 
   const pkg = exp.packages.find((p) => p.id === pkgId)!
   const chosen = exp.addOns.filter((a) => addOns.includes(a.id))

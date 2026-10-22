@@ -1,18 +1,31 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowUpRight, CheckCircle2, Clock, CloudSun, ShieldCheck, Users } from 'lucide-react'
-import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { ArrowUpRight, Camera, Check, CheckCircle2, Clock, CloudSun, Compass, Heart, ShieldCheck, Star, Sun, Users, UtensilsCrossed, Waves } from 'lucide-react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { ExperienceForm } from '../components/booking/ExperienceForm'
 import { PageHero } from '../components/layout/PageHero'
 import { SectionHeading } from '../components/ui/bits'
 import { Img } from '../components/ui/Img'
+import { JourneyTimeline } from '../components/ui/Journey'
 import { Modal } from '../components/ui/Modal'
 import { TiltCard } from '../components/ui/TiltCard'
 import { experienceCategories, experiences, getExperience } from '../data/experiences'
+import { experienceJourneys, type ExperienceJourney } from '../data/journeys'
 import type { Experience, ExperienceCategory } from '../data/types'
 import { money } from '../lib/pricing'
 
 const fromPrice = (e: Experience) => Math.min(...e.packages.map((p) => p.price))
+
+const highlightIcon: Record<ExperienceJourney['highlights'][number]['icon'], typeof Sun> = {
+  swim: Waves,
+  camera: Camera,
+  sun: Sun,
+  food: UtensilsCrossed,
+  heart: Heart,
+  compass: Compass,
+  wave: Waves,
+  star: Star,
+}
 
 export default function Experiences() {
   const { id } = useParams()
@@ -22,6 +35,13 @@ export default function Experiences() {
   const list = useMemo(() => (cat === 'all' ? experiences : experiences.filter((e) => e.category.includes(cat))), [cat])
   const open = id ? getExperience(id) : undefined
   const bookRef = useRef<HTMLDivElement>(null)
+  const [picked, setPicked] = useState<{ id: string; n: number }>({ id: '', n: 0 })
+  const journey = open ? experienceJourneys[open.id] : undefined
+  const choosePackage = (pid: string) => {
+    setPicked((p) => ({ id: pid, n: p.n + 1 }))
+    setTimeout(() => bookRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60)
+  }
+  useEffect(() => setPicked({ id: '', n: 0 }), [open?.id])
 
   useEffect(() => {
     document.title = open ? `${open.title} — SHINE` : 'Experiences — SHINE'
@@ -149,7 +169,82 @@ export default function Experiences() {
               ))}
             </div>
 
-            <p className="leading-relaxed">{open.description}</p>
+            <p className="font-serif text-2xl leading-snug">{open.description}</p>
+
+            {journey && (
+              <>
+                <div>
+                  <h3 className="text-3xl">Why you’ll love it</h3>
+                  <ul className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                    {journey.highlights.map((h, i) => {
+                      const Icon = highlightIcon[h.icon]
+                      return (
+                        <motion.li
+                          key={h.text}
+                          initial={{ opacity: 0, y: 12 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.1 + i * 0.07 }}
+                          className="rounded-2xl border border-line bg-bg-alt/60 p-4"
+                        >
+                          <span className="grid size-10 place-items-center rounded-full bg-gold/15 text-accent">
+                            <Icon className="size-5" aria-hidden />
+                          </span>
+                          <p className="mt-3 text-sm font-medium leading-snug">{h.text}</p>
+                        </motion.li>
+                      )
+                    })}
+                  </ul>
+                </div>
+
+                <JourneyTimeline steps={journey.steps} title="Your day, moment by moment" />
+
+                <div>
+                  <h3 className="text-3xl">Choose your package</h3>
+                  <p className="mt-1 text-sm text-muted">Compare what each option includes, then pick one to continue.</p>
+                  <div className={`mt-6 grid gap-4 ${open.packages.length > 1 ? 'sm:grid-cols-2' : ''} ${open.packages.length > 2 ? 'lg:grid-cols-3' : ''}`}>
+                    {open.packages.map((p) => {
+                      const media = journey.packages[p.id]
+                      const active = picked.id === p.id
+                      return (
+                        <button
+                          key={p.id}
+                          onClick={() => choosePackage(p.id)}
+                          aria-pressed={active}
+                          className={`group flex flex-col overflow-hidden rounded-2xl border bg-card text-left transition ${active ? 'border-gold shadow-[0_0_0_3px_rgb(199_166_106/0.25)]' : 'border-line hover:border-gold/60'}`}
+                        >
+                          {media && (
+                            <span className="relative block aspect-[16/10] overflow-hidden">
+                              <Img name={media.image} alt="" width={600} sizes="(min-width:640px) 300px, 90vw" className="img-cover group-hover:scale-110" />
+                              <span className="absolute right-3 top-3 rounded-full bg-midnight/70 px-3 py-1 font-serif text-lg text-pearl backdrop-blur">
+                                {money(p.price)}
+                                <span className="ml-1 font-sans text-[0.6rem] uppercase tracking-wider text-pearl/70">/{p.per === 'person' ? 'guest' : 'group'}</span>
+                              </span>
+                            </span>
+                          )}
+                          <span className="flex flex-1 flex-col p-4">
+                            <span className="font-serif text-xl leading-tight">{p.name}</span>
+                            {p.note && <span className="mt-0.5 text-xs text-muted">{p.note}</span>}
+                            {media && (
+                              <span className="mt-3 space-y-1.5 text-sm">
+                                {media.perks.map((x) => (
+                                  <span key={x} className="flex gap-2">
+                                    <Check className="mt-0.5 size-4 shrink-0 text-palm" aria-hidden />
+                                    {x}
+                                  </span>
+                                ))}
+                              </span>
+                            )}
+                            <span className={`mt-4 inline-flex items-center gap-1.5 self-start rounded-full px-3 py-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.18em] transition ${active ? 'bg-gold text-midnight' : 'bg-bg-alt group-hover:bg-gold/20'}`}>
+                              {active ? <><Check className="size-3.5" aria-hidden /> Selected</> : 'Choose this'}
+                            </span>
+                          </span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              </>
+            )}
 
             <div className="grid gap-8 sm:grid-cols-2">
               <div>
@@ -175,7 +270,7 @@ export default function Experiences() {
 
             <div ref={bookRef} className="scroll-mt-4 border-t border-line pt-10">
               <h3 className="mb-6 text-4xl">Reserve this experience</h3>
-              <ExperienceForm key={open.id} exp={open} onDone={close} />
+              <ExperienceForm key={open.id} exp={open} onDone={close} packageId={picked} />
             </div>
           </div>
         )}
